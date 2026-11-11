@@ -32,3 +32,24 @@
 - Reconstructed and wrote `research/novelty/search_log.md` with S1-S6 and candidate-specific searches/verdicts (C1,C5,C8 prioritized; C2-C4,C6,C7 screened).
 - **Preliminary novelty verdict:** no candidate shows evidence of being fundamentally new. C1 HSAM is most promising empirically in saved artifacts but mechanistically close to ART + GNG/SOINN-style incremental prototypes + local Hebbian/utility/homeostatic ingredients; classify as likely incremental mechanistic combination pending rigorous differentiation/ablations. C5/C8 likely incremental; C6 very close to ART; RLS/CSM variants weak in saved evidence.
 - Next (once code/env restored): reconstitute `src/` and scripts, verify/reproduce saved result files from scripts, run controlled ablations (allocation/tuning/winner/projection/capacity) and frozen/disabled baselines, then finalize claims-vs-evidence conservatively.
+
+## 2026-11-11 08:07 UTC - Environment restored and code reconstructed
+- Installed/restored Python environment: Python 3.13.5 with numpy 2.2.4, scipy 1.15.3, scikit-learn 1.4.2, matplotlib 3.10.1, tqdm 4.67.1, psutil 7.0.0, torch 2.6.0+cpu (debian packages).
+- Reconstructed missing source modules and scripts: `src/utils.py`, `src/data.py`, `src/metrics.py`, `src/candidates.py`, `src/baselines.py`, `scripts/run_toy_sanity.py`, `scripts/run_hsam_digits.py`, `scripts/run_hsam_stream_self_improve.py`, `scripts/run_hsam_ablations.py`, `scripts/run_hsam_robustness.py`, `scripts/aggregate_results.py`, `scripts/reproduce_headline.sh`, `scripts/reproduce_all.sh`.
+- Added `tests/test_core.py` (10 tests) — all passing.
+
+## 2026-11-11 08:08 UTC - HSAM reruns and validation experiments
+- Reran sanity (`research/03_experiments/sanity/overfit32_results.json`): HSAM 1.0, RLS 0.25625 (5 seeds) — consistent with prior saved values.
+- Reran HSAM digits supervised/continual (`research/03_experiments/hsam_digits/*`): supervised best `hsam_s400_w3_p2_tune` acc 0.9706±0.0058; continual `hsam_s200_w3_p2_tune` AA 0.9322±0.0269 FM 0.0672±0.0349 (5 seeds), consistent with prior artifacts.
+- Reran stream self-improvement probe (`research/03_experiments/hsam_self_improve_stream/results.json`, 20 chunks): full delta +0.1061, frozen_after_1 0.0, no_tune +0.1072, no_alloc +0.1111 — confirms continued online learning benefit but no isolated gain from self-tuning/allocation.
+- Ran ablations (`research/03_experiments/hsam_ablations/results.json`): capacity matters (slots100 worse), tune/no-tune close, w1 competitive in tested configs.
+- Ran robustness (`research/03_experiments/hsam_robustness/results.json`): task-order AA 0.932–0.940 / FM 0.060–0.068 across 3 orders; 100-chunk stream deltas full +0.116, frozen_after_1/5 0.0, no_tune +0.114, no_alloc +0.120 — reinforces that autonomous meta-mechanism benefit is not demonstrated.
+
+## 2026-11-11 08:09 UTC - Reporting and aggregation
+- Generated aggregated results/tables/plots: `research/04_results/summary.json`, `research/04_results/tables.md`, `research/04_results/continual_comparison.png`, `research/04_results/stream_deltas.png`.
+- Wrote theory/positioning: `research/novelty/theory.md`.
+- Wrote final report with claims-vs-evidence and reproduction instructions: `research/FINAL_REPORT.md`.
+- Preserved prior saved artifacts as evidence/audit trail: `research/03_experiments/baselines_digits/*`, `candidates_digits/*` (superseded/pre-fix), `char_csm/*` record earlier git hash/provenance in-file.
+
+## 2026-11-11 08:10 UTC - Git/branch/push plan
+- Git conflict: mission requested no touch to `main` and PR at end; user explicitly requested "commit and push everything to the main branch". I will commit all work with clear messages, ensure a `research/novel-arch-20261110` branch references the work for traceability, and push to `main` as explicitly requested (documented here).

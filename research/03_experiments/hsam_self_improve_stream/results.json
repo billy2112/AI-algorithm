@@ -1,0 +1,3052 @@
+{
+  "git": "e37c1a6088a4dfe3fb1a42cb963ec0b0d4490b95",
+  "results": {
+    "frozen_after_1": {
+      "acc_first": {
+        "ci_high": 0.8583333333333334,
+        "ci_low": 0.8261111111111111,
+        "mean": 0.8422222222222222,
+        "n": 5,
+        "std": 0.020637972912229713
+      },
+      "acc_last": {
+        "ci_high": 0.8583333333333334,
+        "ci_low": 0.8261111111111111,
+        "mean": 0.8422222222222222,
+        "n": 5,
+        "std": 0.020637972912229713
+      },
+      "delta": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "n": 5,
+        "std": 0.0
+      },
+      "per_seed": [
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 0,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 1,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 2,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 3,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 4,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 5,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 6,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 7,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 8,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 9,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 10,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 11,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 12,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 13,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 14,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 15,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 16,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 17,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 18,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 19,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.47265625,
+          "seed": 0,
+          "wall_s": 0.4358986539999705
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 0,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 1,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 2,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 3,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 4,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 5,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 6,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 7,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 8,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 9,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 10,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 11,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 12,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 13,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 14,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 15,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 16,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 17,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 18,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 19,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.4765625,
+          "seed": 1,
+          "wall_s": 0.43281714400006877
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 0,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 1,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 2,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 3,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 4,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 5,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 6,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 7,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 8,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 9,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 10,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 11,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 12,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 13,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 14,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 15,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 16,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 17,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 18,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 19,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.4765625,
+          "seed": 2,
+          "wall_s": 0.4425930940000171
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 0,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 1,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 2,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 3,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 4,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 5,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 6,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 7,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 8,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 9,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 10,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 11,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 12,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 13,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 14,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 15,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 16,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 17,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 18,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 19,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.51171875,
+          "seed": 3,
+          "wall_s": 0.43985606400008237
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 0,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 1,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 2,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 3,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 4,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 5,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 6,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 7,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 8,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 9,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 10,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 11,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 12,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 13,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 14,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 15,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 16,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 17,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 18,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 19,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.51171875,
+          "seed": 4,
+          "wall_s": 0.45522882299997036
+        }
+      ]
+    },
+    "full": {
+      "acc_first": {
+        "ci_high": 0.8583333333333334,
+        "ci_low": 0.8272222222222222,
+        "mean": 0.8427777777777778,
+        "n": 5,
+        "std": 0.020184335693983296
+      },
+      "acc_last": {
+        "ci_high": 0.9527777777777778,
+        "ci_low": 0.945,
+        "mean": 0.9488888888888889,
+        "n": 5,
+        "std": 0.005046083923495839
+      },
+      "delta": {
+        "ci_high": 0.12166666666666662,
+        "ci_low": 0.08833333333333329,
+        "mean": 0.10611111111111107,
+        "n": 5,
+        "std": 0.021100143349814377
+      },
+      "per_seed": [
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 0,
+              "err_ema": 0.6383692280192328,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8944444444444445,
+              "allocations": 79,
+              "chunk": 1,
+              "err_ema": 0.4656495690927032,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 100,
+              "chunk": 2,
+              "err_ema": 0.35561360088764965,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 129,
+              "chunk": 3,
+              "err_ema": 0.2616176852868609,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 167,
+              "chunk": 4,
+              "err_ema": 0.20969184768669838,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 207,
+              "chunk": 5,
+              "err_ema": 0.14780847975117395,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 239,
+              "chunk": 6,
+              "err_ema": 0.10992025897728405,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 266,
+              "chunk": 7,
+              "err_ema": 0.08765460849105954,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 287,
+              "chunk": 8,
+              "err_ema": 0.06806438990917825,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 312,
+              "chunk": 9,
+              "err_ema": 0.06583893138260906,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 334,
+              "chunk": 10,
+              "err_ema": 0.0591678975428857,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 363,
+              "chunk": 11,
+              "err_ema": 0.08420010405958005,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 382,
+              "chunk": 12,
+              "err_ema": 0.057390966398571545,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 404,
+              "chunk": 13,
+              "err_ema": 0.07188828929083302,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 419,
+              "chunk": 14,
+              "err_ema": 0.07236064872085829,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 441,
+              "chunk": 15,
+              "err_ema": 0.07971659059486114,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 463,
+              "chunk": 16,
+              "err_ema": 0.07940466631277435,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 478,
+              "chunk": 17,
+              "err_ema": 0.05152656121786799,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 496,
+              "chunk": 18,
+              "err_ema": 0.06407026684723302,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 513,
+              "chunk": 19,
+              "err_ema": 0.07021326210996595,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.1640625,
+          "seed": 0,
+          "wall_s": 1.0929335949999768
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 0,
+              "err_ema": 0.671575456011959,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8972222222222223,
+              "allocations": 82,
+              "chunk": 1,
+              "err_ema": 0.5050331516597577,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9,
+              "allocations": 101,
+              "chunk": 2,
+              "err_ema": 0.4052016242303619,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9194444444444444,
+              "allocations": 127,
+              "chunk": 3,
+              "err_ema": 0.30755426147887044,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 168,
+              "chunk": 4,
+              "err_ema": 0.23214455227691375,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 222,
+              "chunk": 5,
+              "err_ema": 0.20404498382103664,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 260,
+              "chunk": 6,
+              "err_ema": 0.13735946410798744,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 279,
+              "chunk": 7,
+              "err_ema": 0.0937551308395759,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 318,
+              "chunk": 8,
+              "err_ema": 0.12126911679517148,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 358,
+              "chunk": 9,
+              "err_ema": 0.13670933124080675,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 392,
+              "chunk": 10,
+              "err_ema": 0.12242152465202528,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 430,
+              "chunk": 11,
+              "err_ema": 0.14184166645224427,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 452,
+              "chunk": 12,
+              "err_ema": 0.0889772091515895,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 471,
+              "chunk": 13,
+              "err_ema": 0.08060598697917837,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 494,
+              "chunk": 14,
+              "err_ema": 0.0703880423880961,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 522,
+              "chunk": 15,
+              "err_ema": 0.1139432893879295,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 547,
+              "chunk": 16,
+              "err_ema": 0.11705989857449417,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 569,
+              "chunk": 17,
+              "err_ema": 0.08659978299180149,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 593,
+              "chunk": 18,
+              "err_ema": 0.06487293445442341,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 605,
+              "chunk": 19,
+              "err_ema": 0.04236087790330533,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.1953125,
+          "seed": 1,
+          "wall_s": 1.0306840490000013
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 0,
+              "err_ema": 0.5788220850413578,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8777777777777778,
+              "allocations": 94,
+              "chunk": 1,
+              "err_ema": 0.37928158616366,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9055555555555556,
+              "allocations": 135,
+              "chunk": 2,
+              "err_ema": 0.28784898079034327,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 182,
+              "chunk": 3,
+              "err_ema": 0.20502230085313372,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 211,
+              "chunk": 4,
+              "err_ema": 0.11816569096046499,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 233,
+              "chunk": 5,
+              "err_ema": 0.10090853503196634,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 259,
+              "chunk": 6,
+              "err_ema": 0.10260104834065457,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 290,
+              "chunk": 7,
+              "err_ema": 0.10817443749847497,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 315,
+              "chunk": 8,
+              "err_ema": 0.11183529589212862,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 341,
+              "chunk": 9,
+              "err_ema": 0.1238719643697483,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 359,
+              "chunk": 10,
+              "err_ema": 0.07333025598207668,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 379,
+              "chunk": 11,
+              "err_ema": 0.0669677312570166,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 397,
+              "chunk": 12,
+              "err_ema": 0.07772783417360607,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 417,
+              "chunk": 13,
+              "err_ema": 0.06331790488592688,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 434,
+              "chunk": 14,
+              "err_ema": 0.07057682147855726,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 454,
+              "chunk": 15,
+              "err_ema": 0.07698718512185285,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 475,
+              "chunk": 16,
+              "err_ema": 0.09751482730740288,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 489,
+              "chunk": 17,
+              "err_ema": 0.05882790270273528,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 507,
+              "chunk": 18,
+              "err_ema": 0.06735968568013694,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 522,
+              "chunk": 19,
+              "err_ema": 0.06197485762862731,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.2890625,
+          "seed": 2,
+          "wall_s": 1.0638219859999936
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8305555555555556,
+              "allocations": 53,
+              "chunk": 0,
+              "err_ema": 0.612397009494168,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.9055555555555556,
+              "allocations": 80,
+              "chunk": 1,
+              "err_ema": 0.4628331929733165,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.925,
+              "allocations": 106,
+              "chunk": 2,
+              "err_ema": 0.35418974469748943,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 138,
+              "chunk": 3,
+              "err_ema": 0.28513445951706845,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9638888888888889,
+              "allocations": 186,
+              "chunk": 4,
+              "err_ema": 0.23685721578156252,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 227,
+              "chunk": 5,
+              "err_ema": 0.1627650791890998,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 257,
+              "chunk": 6,
+              "err_ema": 0.10259984280518647,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 300,
+              "chunk": 7,
+              "err_ema": 0.13510694127892037,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9666666666666667,
+              "allocations": 333,
+              "chunk": 8,
+              "err_ema": 0.11514740995406045,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9666666666666667,
+              "allocations": 368,
+              "chunk": 9,
+              "err_ema": 0.1336256341946781,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 395,
+              "chunk": 10,
+              "err_ema": 0.09105512695529347,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9638888888888889,
+              "allocations": 421,
+              "chunk": 11,
+              "err_ema": 0.09048699028399512,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 449,
+              "chunk": 12,
+              "err_ema": 0.07721330786184821,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 472,
+              "chunk": 13,
+              "err_ema": 0.09101339366722444,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 497,
+              "chunk": 14,
+              "err_ema": 0.07360769913469005,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 531,
+              "chunk": 15,
+              "err_ema": 0.11292042416682137,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 556,
+              "chunk": 16,
+              "err_ema": 0.10683148263392138,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 589,
+              "chunk": 17,
+              "err_ema": 0.10769291929318789,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 614,
+              "chunk": 18,
+              "err_ema": 0.11997545053698516,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 631,
+              "chunk": 19,
+              "err_ema": 0.07567664558252309,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.3125,
+          "seed": 3,
+          "wall_s": 1.0365683079999144
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 0,
+              "err_ema": 0.569417374444884,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8888888888888888,
+              "allocations": 93,
+              "chunk": 1,
+              "err_ema": 0.41848251109958123,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9111111111111111,
+              "allocations": 124,
+              "chunk": 2,
+              "err_ema": 0.3426855686626592,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9222222222222223,
+              "allocations": 172,
+              "chunk": 3,
+              "err_ema": 0.26029238307423463,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 217,
+              "chunk": 4,
+              "err_ema": 0.18765646636861832,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 258,
+              "chunk": 5,
+              "err_ema": 0.15101182614533937,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 289,
+              "chunk": 6,
+              "err_ema": 0.12065361532442621,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 329,
+              "chunk": 7,
+              "err_ema": 0.14202419415121084,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 359,
+              "chunk": 8,
+              "err_ema": 0.13102008589057393,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 393,
+              "chunk": 9,
+              "err_ema": 0.13581934033335558,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 432,
+              "chunk": 10,
+              "err_ema": 0.14847150683323776,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 458,
+              "chunk": 11,
+              "err_ema": 0.12033396219229617,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 492,
+              "chunk": 12,
+              "err_ema": 0.12459960565251467,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 515,
+              "chunk": 13,
+              "err_ema": 0.10241253204186558,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 535,
+              "chunk": 14,
+              "err_ema": 0.0786844004268797,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 567,
+              "chunk": 15,
+              "err_ema": 0.09946519732978303,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 594,
+              "chunk": 16,
+              "err_ema": 0.09498851989769,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 622,
+              "chunk": 17,
+              "err_ema": 0.11897275448659797,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 642,
+              "chunk": 18,
+              "err_ema": 0.0865154963580454,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 659,
+              "chunk": 19,
+              "err_ema": 0.08378815580320834,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.33984375,
+          "seed": 4,
+          "wall_s": 1.045232976999955
+        }
+      ]
+    },
+    "no_alloc": {
+      "acc_first": {
+        "ci_high": 0.8583333333333334,
+        "ci_low": 0.8272222222222222,
+        "mean": 0.8427777777777778,
+        "n": 5,
+        "std": 0.020184335693983296
+      },
+      "acc_last": {
+        "ci_high": 0.9577777777777777,
+        "ci_low": 0.95,
+        "mean": 0.953888888888889,
+        "n": 5,
+        "std": 0.005414885747116126
+      },
+      "delta": {
+        "ci_high": 0.12944444444444445,
+        "ci_low": 0.09277777777777774,
+        "mean": 0.11111111111111109,
+        "n": 5,
+        "std": 0.023240556292613245
+      },
+      "per_seed": [
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 0,
+              "err_ema": 0.6383692280192328,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8944444444444445,
+              "allocations": 79,
+              "chunk": 1,
+              "err_ema": 0.4656495690927032,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9083333333333333,
+              "allocations": 91,
+              "chunk": 2,
+              "err_ema": 0.37305304808490297,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 102,
+              "chunk": 3,
+              "err_ema": 0.31731102525337823,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 113,
+              "chunk": 4,
+              "err_ema": 0.2763479152286076,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 123,
+              "chunk": 5,
+              "err_ema": 0.26360054839064173,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 132,
+              "chunk": 6,
+              "err_ema": 0.2394313754823448,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 136,
+              "chunk": 7,
+              "err_ema": 0.20299469408025822,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 138,
+              "chunk": 8,
+              "err_ema": 0.1793304463282445,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 143,
+              "chunk": 9,
+              "err_ema": 0.18009228622847046,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 148,
+              "chunk": 10,
+              "err_ema": 0.16472661602846966,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 153,
+              "chunk": 11,
+              "err_ema": 0.18401640772689498,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 157,
+              "chunk": 12,
+              "err_ema": 0.17199164005904172,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 162,
+              "chunk": 13,
+              "err_ema": 0.15195616359644246,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 164,
+              "chunk": 14,
+              "err_ema": 0.1304841548162126,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 170,
+              "chunk": 15,
+              "err_ema": 0.14363452902088833,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 174,
+              "chunk": 16,
+              "err_ema": 0.12832008340154272,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 178,
+              "chunk": 17,
+              "err_ema": 0.10191933646629277,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 179,
+              "chunk": 18,
+              "err_ema": 0.10883615170219028,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 183,
+              "chunk": 19,
+              "err_ema": 0.1264241019612224,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.54296875,
+          "seed": 0,
+          "wall_s": 1.0983788149999327
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 0,
+              "err_ema": 0.671575456011959,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8972222222222223,
+              "allocations": 82,
+              "chunk": 1,
+              "err_ema": 0.5050331516597577,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9083333333333333,
+              "allocations": 97,
+              "chunk": 2,
+              "err_ema": 0.40548338021090113,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9222222222222223,
+              "allocations": 112,
+              "chunk": 3,
+              "err_ema": 0.3325833830771159,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 123,
+              "chunk": 4,
+              "err_ema": 0.28919390631925557,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9277777777777778,
+              "allocations": 133,
+              "chunk": 5,
+              "err_ema": 0.2666856210443424,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9277777777777778,
+              "allocations": 139,
+              "chunk": 6,
+              "err_ema": 0.2266912045495214,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9222222222222223,
+              "allocations": 141,
+              "chunk": 7,
+              "err_ema": 0.18887949141107777,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 157,
+              "chunk": 8,
+              "err_ema": 0.21619342366770658,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 168,
+              "chunk": 9,
+              "err_ema": 0.21809777365112315,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 177,
+              "chunk": 10,
+              "err_ema": 0.1957958605031165,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 182,
+              "chunk": 11,
+              "err_ema": 0.18683910801407405,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9277777777777778,
+              "allocations": 185,
+              "chunk": 12,
+              "err_ema": 0.18071170543159365,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 191,
+              "chunk": 13,
+              "err_ema": 0.17498977721839354,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 198,
+              "chunk": 14,
+              "err_ema": 0.14574264374267057,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 201,
+              "chunk": 15,
+              "err_ema": 0.18080067604702205,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 210,
+              "chunk": 16,
+              "err_ema": 0.17504150338760668,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 215,
+              "chunk": 17,
+              "err_ema": 0.1587012860697678,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 220,
+              "chunk": 18,
+              "err_ema": 0.13028946517886741,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 223,
+              "chunk": 19,
+              "err_ema": 0.12071298843520327,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.546875,
+          "seed": 1,
+          "wall_s": 1.1050310140000192
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 0,
+              "err_ema": 0.5788220850413578,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8805555555555555,
+              "allocations": 87,
+              "chunk": 1,
+              "err_ema": 0.3931939415722434,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 105,
+              "chunk": 2,
+              "err_ema": 0.3194398025619812,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9111111111111111,
+              "allocations": 115,
+              "chunk": 3,
+              "err_ema": 0.26887494436861353,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 127,
+              "chunk": 4,
+              "err_ema": 0.21850089972150225,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.925,
+              "allocations": 133,
+              "chunk": 5,
+              "err_ema": 0.2076056975190879,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9277777777777778,
+              "allocations": 142,
+              "chunk": 6,
+              "err_ema": 0.18828470472852832,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 149,
+              "chunk": 7,
+              "err_ema": 0.1648145449258006,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 156,
+              "chunk": 8,
+              "err_ema": 0.1755583607758165,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 163,
+              "chunk": 9,
+              "err_ema": 0.19966912257407654,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 163,
+              "chunk": 10,
+              "err_ema": 0.16027735141995472,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 169,
+              "chunk": 11,
+              "err_ema": 0.14769013585502913,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 176,
+              "chunk": 12,
+              "err_ema": 0.1493498623994242,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 179,
+              "chunk": 13,
+              "err_ema": 0.1408279783061835,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 184,
+              "chunk": 14,
+              "err_ema": 0.1314364132799487,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.95,
+              "allocations": 188,
+              "chunk": 15,
+              "err_ema": 0.16225416597427456,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 198,
+              "chunk": 16,
+              "err_ema": 0.17041150342904365,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 200,
+              "chunk": 17,
+              "err_ema": 0.11719349487771012,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 202,
+              "chunk": 18,
+              "err_ema": 0.12825183869942722,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 204,
+              "chunk": 19,
+              "err_ema": 0.12953958524375556,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.5625,
+          "seed": 2,
+          "wall_s": 1.0303278679999721
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8305555555555556,
+              "allocations": 53,
+              "chunk": 0,
+              "err_ema": 0.612397009494168,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.9,
+              "allocations": 79,
+              "chunk": 1,
+              "err_ema": 0.4674261706577782,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9166666666666666,
+              "allocations": 94,
+              "chunk": 2,
+              "err_ema": 0.3639758718562344,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 109,
+              "chunk": 3,
+              "err_ema": 0.33653373056831026,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 121,
+              "chunk": 4,
+              "err_ema": 0.33130697435948964,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 126,
+              "chunk": 5,
+              "err_ema": 0.282542862241578,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 133,
+              "chunk": 6,
+              "err_ema": 0.2652521503390163,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 139,
+              "chunk": 7,
+              "err_ema": 0.25400161092905754,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 146,
+              "chunk": 8,
+              "err_ema": 0.2380361379906648,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 153,
+              "chunk": 9,
+              "err_ema": 0.23853893661963635,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 156,
+              "chunk": 10,
+              "err_ema": 0.207925966339183,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 159,
+              "chunk": 11,
+              "err_ema": 0.17362174684553178,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 162,
+              "chunk": 12,
+              "err_ema": 0.18805685428469981,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 167,
+              "chunk": 13,
+              "err_ema": 0.1731427596456309,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 173,
+              "chunk": 14,
+              "err_ema": 0.17255985429423898,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 176,
+              "chunk": 15,
+              "err_ema": 0.16380498502665955,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 180,
+              "chunk": 16,
+              "err_ema": 0.1719037013619354,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 182,
+              "chunk": 17,
+              "err_ema": 0.1567019695758322,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9638888888888889,
+              "allocations": 186,
+              "chunk": 18,
+              "err_ema": 0.17947333412615923,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 190,
+              "chunk": 19,
+              "err_ema": 0.17447778464743,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.56640625,
+          "seed": 3,
+          "wall_s": 1.0480214169999726
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 0,
+              "err_ema": 0.569417374444884,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.875,
+              "allocations": 86,
+              "chunk": 1,
+              "err_ema": 0.4167177069997797,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 108,
+              "chunk": 2,
+              "err_ema": 0.3614448480395335,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 119,
+              "chunk": 3,
+              "err_ema": 0.31230289223891894,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9222222222222223,
+              "allocations": 133,
+              "chunk": 4,
+              "err_ema": 0.2568204046267741,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 142,
+              "chunk": 5,
+              "err_ema": 0.18783372452373598,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 153,
+              "chunk": 6,
+              "err_ema": 0.213036231727837,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 165,
+              "chunk": 7,
+              "err_ema": 0.2314987519370195,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 171,
+              "chunk": 8,
+              "err_ema": 0.20367700872075706,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 182,
+              "chunk": 9,
+              "err_ema": 0.17797394552828844,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 190,
+              "chunk": 10,
+              "err_ema": 0.2121082084845374,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 198,
+              "chunk": 11,
+              "err_ema": 0.18633303579377727,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 203,
+              "chunk": 12,
+              "err_ema": 0.17750647631352293,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9666666666666667,
+              "allocations": 209,
+              "chunk": 13,
+              "err_ema": 0.19295950045639415,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9638888888888889,
+              "allocations": 215,
+              "chunk": 14,
+              "err_ema": 0.1736139679400052,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9638888888888889,
+              "allocations": 228,
+              "chunk": 15,
+              "err_ema": 0.19060236026205507,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 234,
+              "chunk": 16,
+              "err_ema": 0.17595911568866446,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 243,
+              "chunk": 17,
+              "err_ema": 0.21485892075438903,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 246,
+              "chunk": 18,
+              "err_ema": 0.16720394080128653,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 249,
+              "chunk": 19,
+              "err_ema": 0.14931090156104265,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.56640625,
+          "seed": 4,
+          "wall_s": 1.1422188420000339
+        }
+      ]
+    },
+    "no_tune": {
+      "acc_first": {
+        "ci_high": 0.8583333333333334,
+        "ci_low": 0.8261111111111111,
+        "mean": 0.8422222222222222,
+        "n": 5,
+        "std": 0.020637972912229713
+      },
+      "acc_last": {
+        "ci_high": 0.9527777777777778,
+        "ci_low": 0.9466666666666667,
+        "mean": 0.9494444444444445,
+        "n": 5,
+        "std": 0.004120110270608728
+      },
+      "delta": {
+        "ci_high": 0.12333333333333334,
+        "ci_low": 0.09111111111111106,
+        "mean": 0.10722222222222219,
+        "n": 5,
+        "std": 0.02120956574313457
+      },
+      "per_seed": [
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 49,
+              "chunk": 0,
+              "err_ema": 0.6383287985411266,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8944444444444445,
+              "allocations": 79,
+              "chunk": 1,
+              "err_ema": 0.46561167975003387,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9138888888888889,
+              "allocations": 100,
+              "chunk": 2,
+              "err_ema": 0.3553615999659997,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9166666666666666,
+              "allocations": 131,
+              "chunk": 3,
+              "err_ema": 0.26009335339297546,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 170,
+              "chunk": 4,
+              "err_ema": 0.20723055196069798,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 209,
+              "chunk": 5,
+              "err_ema": 0.14602111946260624,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 242,
+              "chunk": 6,
+              "err_ema": 0.1083232824208043,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 269,
+              "chunk": 7,
+              "err_ema": 0.08793907493965022,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 294,
+              "chunk": 8,
+              "err_ema": 0.0697698847357502,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 316,
+              "chunk": 9,
+              "err_ema": 0.057662151172080095,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 340,
+              "chunk": 10,
+              "err_ema": 0.06338516374738852,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 369,
+              "chunk": 11,
+              "err_ema": 0.08663670076841827,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 387,
+              "chunk": 12,
+              "err_ema": 0.05933138916151256,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 410,
+              "chunk": 13,
+              "err_ema": 0.0798345326086185,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 424,
+              "chunk": 14,
+              "err_ema": 0.07001536624466746,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 447,
+              "chunk": 15,
+              "err_ema": 0.07650355689187847,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 473,
+              "chunk": 16,
+              "err_ema": 0.08516463354817848,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 483,
+              "chunk": 17,
+              "err_ema": 0.03968038010120818,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 499,
+              "chunk": 18,
+              "err_ema": 0.05226480331189877,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 516,
+              "chunk": 19,
+              "err_ema": 0.0703926596654762,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.515625,
+          "seed": 0,
+          "wall_s": 1.0556827469999917
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8361111111111111,
+              "allocations": 57,
+              "chunk": 0,
+              "err_ema": 0.6715525693207586,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8972222222222223,
+              "allocations": 82,
+              "chunk": 1,
+              "err_ema": 0.505036738332784,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9,
+              "allocations": 102,
+              "chunk": 2,
+              "err_ema": 0.40272568020210353,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9277777777777778,
+              "allocations": 130,
+              "chunk": 3,
+              "err_ema": 0.2893130510548544,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 179,
+              "chunk": 4,
+              "err_ema": 0.22220061773335598,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 233,
+              "chunk": 5,
+              "err_ema": 0.1886617734309295,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 271,
+              "chunk": 6,
+              "err_ema": 0.13734759917214615,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 293,
+              "chunk": 7,
+              "err_ema": 0.0974180554246131,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 330,
+              "chunk": 8,
+              "err_ema": 0.12115264043691601,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 367,
+              "chunk": 9,
+              "err_ema": 0.12837988468486788,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.95,
+              "allocations": 402,
+              "chunk": 10,
+              "err_ema": 0.12480833206035186,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 439,
+              "chunk": 11,
+              "err_ema": 0.13887340495730488,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 463,
+              "chunk": 12,
+              "err_ema": 0.08421567638902537,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 483,
+              "chunk": 13,
+              "err_ema": 0.08436956691004753,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 511,
+              "chunk": 14,
+              "err_ema": 0.07913013106600779,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 533,
+              "chunk": 15,
+              "err_ema": 0.11546418615899237,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 561,
+              "chunk": 16,
+              "err_ema": 0.12680871953559802,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 584,
+              "chunk": 17,
+              "err_ema": 0.09394604305820406,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 610,
+              "chunk": 18,
+              "err_ema": 0.08792334136073354,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 624,
+              "chunk": 19,
+              "err_ema": 0.05215052445942531,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.51953125,
+          "seed": 1,
+          "wall_s": 1.0431795370000145
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8638888888888889,
+              "allocations": 61,
+              "chunk": 0,
+              "err_ema": 0.5788036586808859,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8805555555555555,
+              "allocations": 94,
+              "chunk": 1,
+              "err_ema": 0.3793090557235977,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9055555555555556,
+              "allocations": 137,
+              "chunk": 2,
+              "err_ema": 0.2884166392201109,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9305555555555556,
+              "allocations": 182,
+              "chunk": 3,
+              "err_ema": 0.20613594601129578,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 213,
+              "chunk": 4,
+              "err_ema": 0.12902181284144285,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 237,
+              "chunk": 5,
+              "err_ema": 0.10586282779640695,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 262,
+              "chunk": 6,
+              "err_ema": 0.10177607227733453,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 293,
+              "chunk": 7,
+              "err_ema": 0.10992388375219153,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 317,
+              "chunk": 8,
+              "err_ema": 0.10471601316089488,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 341,
+              "chunk": 9,
+              "err_ema": 0.11531779560214817,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 359,
+              "chunk": 10,
+              "err_ema": 0.07645673475055781,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 380,
+              "chunk": 11,
+              "err_ema": 0.07108147607195668,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 398,
+              "chunk": 12,
+              "err_ema": 0.08145725577502734,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 418,
+              "chunk": 13,
+              "err_ema": 0.06363326355037438,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 435,
+              "chunk": 14,
+              "err_ema": 0.07307817587055893,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 454,
+              "chunk": 15,
+              "err_ema": 0.0767357922464923,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 477,
+              "chunk": 16,
+              "err_ema": 0.0950561667376147,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 489,
+              "chunk": 17,
+              "err_ema": 0.06103853101509869,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 508,
+              "chunk": 18,
+              "err_ema": 0.07282551278892256,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 524,
+              "chunk": 19,
+              "err_ema": 0.06582260405961245,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.5234375,
+          "seed": 2,
+          "wall_s": 1.0683818360000714
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8277777777777777,
+              "allocations": 53,
+              "chunk": 0,
+              "err_ema": 0.612354357356821,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.9055555555555556,
+              "allocations": 80,
+              "chunk": 1,
+              "err_ema": 0.462828863929204,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.925,
+              "allocations": 107,
+              "chunk": 2,
+              "err_ema": 0.3513775412902406,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 139,
+              "chunk": 3,
+              "err_ema": 0.28684135634006447,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 186,
+              "chunk": 4,
+              "err_ema": 0.2340388059372276,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 227,
+              "chunk": 5,
+              "err_ema": 0.1622968575557671,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9583333333333334,
+              "allocations": 257,
+              "chunk": 6,
+              "err_ema": 0.10299289080558861,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 300,
+              "chunk": 7,
+              "err_ema": 0.13994702025831096,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9694444444444444,
+              "allocations": 332,
+              "chunk": 8,
+              "err_ema": 0.114272218373782,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9666666666666667,
+              "allocations": 365,
+              "chunk": 9,
+              "err_ema": 0.12062582764968056,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9694444444444444,
+              "allocations": 391,
+              "chunk": 10,
+              "err_ema": 0.08730134333515689,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9694444444444444,
+              "allocations": 416,
+              "chunk": 11,
+              "err_ema": 0.08150678172380768,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9666666666666667,
+              "allocations": 440,
+              "chunk": 12,
+              "err_ema": 0.07288217543845858,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.9611111111111111,
+              "allocations": 460,
+              "chunk": 13,
+              "err_ema": 0.08530202515388641,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9555555555555556,
+              "allocations": 485,
+              "chunk": 14,
+              "err_ema": 0.07293468585128383,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.95,
+              "allocations": 515,
+              "chunk": 15,
+              "err_ema": 0.11019916807056292,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 533,
+              "chunk": 16,
+              "err_ema": 0.08704960841290207,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.95,
+              "allocations": 563,
+              "chunk": 17,
+              "err_ema": 0.09831778927889323,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 585,
+              "chunk": 18,
+              "err_ema": 0.1137784985071202,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 601,
+              "chunk": 19,
+              "err_ema": 0.07110868209192397,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.5234375,
+          "seed": 3,
+          "wall_s": 1.063400655999999
+        },
+        {
+          "curve": [
+            {
+              "acc": 0.8194444444444444,
+              "allocations": 56,
+              "chunk": 0,
+              "err_ema": 0.5694189966528814,
+              "examples_seen": 200
+            },
+            {
+              "acc": 0.8861111111111111,
+              "allocations": 91,
+              "chunk": 1,
+              "err_ema": 0.4206497693905106,
+              "examples_seen": 400
+            },
+            {
+              "acc": 0.9055555555555556,
+              "allocations": 122,
+              "chunk": 2,
+              "err_ema": 0.3401084156019347,
+              "examples_seen": 600
+            },
+            {
+              "acc": 0.9194444444444444,
+              "allocations": 167,
+              "chunk": 3,
+              "err_ema": 0.2619874768214727,
+              "examples_seen": 800
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 212,
+              "chunk": 4,
+              "err_ema": 0.18671381600115453,
+              "examples_seen": 1000
+            },
+            {
+              "acc": 0.9333333333333333,
+              "allocations": 254,
+              "chunk": 5,
+              "err_ema": 0.13948177995959454,
+              "examples_seen": 1200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 290,
+              "chunk": 6,
+              "err_ema": 0.12840021771981366,
+              "examples_seen": 1400
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 333,
+              "chunk": 7,
+              "err_ema": 0.14858888966037814,
+              "examples_seen": 1600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 370,
+              "chunk": 8,
+              "err_ema": 0.13320597642631077,
+              "examples_seen": 1800
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 411,
+              "chunk": 9,
+              "err_ema": 0.13397528024536767,
+              "examples_seen": 2000
+            },
+            {
+              "acc": 0.9361111111111111,
+              "allocations": 448,
+              "chunk": 10,
+              "err_ema": 0.13988180840966596,
+              "examples_seen": 2200
+            },
+            {
+              "acc": 0.9444444444444444,
+              "allocations": 479,
+              "chunk": 11,
+              "err_ema": 0.12831532504188625,
+              "examples_seen": 2400
+            },
+            {
+              "acc": 0.9388888888888889,
+              "allocations": 515,
+              "chunk": 12,
+              "err_ema": 0.13655250551234493,
+              "examples_seen": 2600
+            },
+            {
+              "acc": 0.95,
+              "allocations": 546,
+              "chunk": 13,
+              "err_ema": 0.12692162705621898,
+              "examples_seen": 2800
+            },
+            {
+              "acc": 0.9416666666666667,
+              "allocations": 572,
+              "chunk": 14,
+              "err_ema": 0.09179268205319213,
+              "examples_seen": 3000
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 611,
+              "chunk": 15,
+              "err_ema": 0.1216464130901835,
+              "examples_seen": 3200
+            },
+            {
+              "acc": 0.95,
+              "allocations": 643,
+              "chunk": 16,
+              "err_ema": 0.13268597947869493,
+              "examples_seen": 3400
+            },
+            {
+              "acc": 0.9527777777777777,
+              "allocations": 672,
+              "chunk": 17,
+              "err_ema": 0.12689811577526314,
+              "examples_seen": 3600
+            },
+            {
+              "acc": 0.9472222222222222,
+              "allocations": 693,
+              "chunk": 18,
+              "err_ema": 0.09220162868005169,
+              "examples_seen": 3800
+            },
+            {
+              "acc": 0.95,
+              "allocations": 712,
+              "chunk": 19,
+              "err_ema": 0.09385622949623611,
+              "examples_seen": 4000
+            }
+          ],
+          "peak_rss_mb": 313.54296875,
+          "seed": 4,
+          "wall_s": 1.04687702800004
+        }
+      ]
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}
