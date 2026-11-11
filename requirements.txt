@@ -1,0 +1,8 @@
+# Pinned environment (observed/targeted in project notes; install in compatible CPU environment)
+numpy==2.2.4
+scipy==1.15.3
+torch==2.6.0
+matplotlib==3.10.1
+tqdm==4.67.1
+psutil==7.0.0
+scikit-learn==1.4.2

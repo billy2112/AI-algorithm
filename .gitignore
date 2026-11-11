@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and large artifacts
+/data/
+*.csv
+*.tsv
+*.parquet
+*.h5
+*.hdf5
+*.npz
+*.npy
+*.pkl
+*.pickle
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.bin
+*.tar
+*.tar.gz
+*.zip
+*.7z
+
+# Logs/temp
+*.log
+/tmp/
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Keep experiment outputs in research/ but ignore bulky generated plots cache if any
+# (explicitly track JSON/MD/py/sh/txt/csv-small summaries as needed)
