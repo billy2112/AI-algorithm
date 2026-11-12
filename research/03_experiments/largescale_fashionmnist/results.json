@@ -1,0 +1,17 @@
+{
+  "continual": {
+    "error": "Using `parser='auto'` wit dense data requires pandas to be installed. Alternatively, explicitly set `parser='liac-arff'`."
+  },
+  "dataset": "Fashion-MNIST (PCA features)",
+  "git": "feb6c65dbab8c489809438ce4ef0212be83cd33f",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "supervised": {
+    "error": "Using `parser='auto'` wit dense data requires pandas to be installed. Alternatively, explicitly set `parser='liac-arff'`."
+  }
+}
