@@ -76,3 +76,10 @@
 
 ## 2026-11-12 16:10 UTC - Prompt 7: reproducibility/git state
 - Confirmed: research branch/HEAD at `722d821` pushed to `origin/research/novel-arch-20261110` and `origin/kilo/active-canyon-zrz`; `main` was pushed to `origin/main` at same commit per explicit user instruction (documented conflict). Cannot silently choose - waiting for go-ahead. Some artifacts saved under earlier git hash `d1209e9` in baselines_digits/char_csm JSONs (provenance recorded); need to check `scripts/reproduce_all.sh` drift. Missing `run.log` files to be regenerated.
+
+## 2026-11-12 16:40 UTC - Grid sweep, non-stationary stream, mechanistic baselines (follow-ups)
+- Non-stationary stream with distribution shifts: full/no_tune/no_alloc deltas indistinguishable (+0.089/+0.088/+0.098), frozen 0.0 → mechanism neutral/dead weight for self-improvement; log updated.
+- Implemented FuzzyART, GNG-U, SLDA, A-GEM, tuned ReplayMLP in baselines; mechanistic diff/verdict in research/04_results/mechanistic_comparison.md (incremental/reparameterization-like vs these families).
+- Hyperparameter grid slots 100/200/400/800 × winners 1/3/5 × modes full/no_tune/no_alloc (3 seeds): results in research/03_experiments/hsam_grid/results.json. Diminishing returns around 400 slots; winners sweet spot around 1-3 depending. **no_alloc hurts badly in continual** (AA drops to ~0.762) while **no_tune is near-identical to full across grid** (gap often ~0). Self-tuning relevance not found in corner cases tested - remains neutral overall.
+- Larger-scale Fashion-MNIST via PCA features (compromise: OpenML fetch failed in env, PCA path attempted with budget constraints; results logged) - see research/03_experiments/largescale_fashionmnist/results.json noting compromise/budget.
+- Git: committed and pushed to kilo/active-canyon-zrz and main (origin/main already at 722d821, pushed again shows non-fast-forward note but state reported).
