@@ -83,3 +83,9 @@
 - Hyperparameter grid slots 100/200/400/800 × winners 1/3/5 × modes full/no_tune/no_alloc (3 seeds): results in research/03_experiments/hsam_grid/results.json. Diminishing returns around 400 slots; winners sweet spot around 1-3 depending. **no_alloc hurts badly in continual** (AA drops to ~0.762) while **no_tune is near-identical to full across grid** (gap often ~0). Self-tuning relevance not found in corner cases tested - remains neutral overall.
 - Larger-scale Fashion-MNIST via PCA features (compromise: OpenML fetch failed in env, PCA path attempted with budget constraints; results logged) - see research/03_experiments/largescale_fashionmnist/results.json noting compromise/budget.
 - Git: committed and pushed to kilo/active-canyon-zrz and main (origin/main already at 722d821, pushed again shows non-fast-forward note but state reported).
+
+## 2026-11-12 17:00 UTC - Fashion-MNIST scale-up attempt
+- Installed pandas, retried OpenML fetch_openml('Fashion-MNIST') - still fails in this environment
+- torchvision/tensorflow not available
+- No working data loader available; stopping without improvised fallback
+- Marked as invalid/exploratory in report; digits remain primary evidence

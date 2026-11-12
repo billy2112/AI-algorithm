@@ -10,3 +10,8 @@
 - **Variance retained unknown, sample counts unknown**
 
 This result must be treated as **exploratory/invalid** and should **NOT** carry evidentiary weight. The digits results (8x8, 1797 images) remain the primary evidence.
+
+## Update
+- Installed pandas 2.2.3; attempted fetch_openml('Fashion-MNIST') again - still failed in this environment
+- No working data loader available (torchvision/tensorflow not present; OpenML fetch blocked)
+- **STOPPING** - no improvised fallback will be created. Scale-up results remain unavailable/invalid.
