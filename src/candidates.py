@@ -31,6 +31,7 @@ class HSAM:
         u0=1.0,
         self_tune=True,
         sim_alloc_threshold=0.2,
+        per_slot_adaptive=True,
     ):
         self.rng = np.random.default_rng(seed)
         self.input_dim = input_dim
@@ -46,6 +47,7 @@ class HSAM:
         self.u0 = u0
         self.self_tune = self_tune
         self.sim_alloc_threshold = sim_alloc_threshold
+        self.per_slot_adaptive = per_slot_adaptive
         # random projection (fixed)
         self.P = self.rng.normal(
             0, 1.0 / np.sqrt(max(1, input_dim)), size=(input_dim, self.proj_dim)
@@ -56,6 +58,14 @@ class HSAM:
         self.scalar_values = np.zeros(n_slots, dtype=np.float32) if output_dim is None else None
         self.utility = np.zeros(n_slots, dtype=np.float32)
         self.filled = np.zeros(n_slots, dtype=bool)
+        # per-slot adaptive learning rates based on local error history
+        self.slot_eta_k = np.ones(n_slots, dtype=np.float32) * eta_k
+        self.slot_eta_v = np.ones(n_slots, dtype=np.float32) * eta_v
+        self.slot_err_ema = np.ones(n_slots, dtype=np.float32)
+        self.slot_count = np.zeros(n_slots, dtype=np.float32)
+        # per-class/per-cluster adaptive vigilance
+        self.class_vigilance = {}
+        self.class_err = {}
         # endogenous stats
         self.err_ema = 1.0
         self.err_sq_ema = 1.0
@@ -139,7 +149,7 @@ class HSAM:
         if self.last_err is not None:
             self.improve_ema = 0.99 * self.improve_ema + 0.01 * (self.last_err - err)
         self.last_err = err
-        # autonomous homeostatic tuning (bounded)
+        # autonomous homeostatic tuning (bounded) - redesigned with per-slot adaptive rates
         if self.self_tune and self.step % 50 == 0:
             if self.improve_ema > 0:
                 self.eta_k = max(0.01, self.eta_k * 0.995)
@@ -150,6 +160,33 @@ class HSAM:
                 self.eta_v = min(0.5, self.eta_v * 1.005)
                 self.v_low = max(0.2, self.v_low * 0.998)
                 self.v_high = max(self.v_low + 0.2, self.v_high * 0.998)
+            # Per-slot adaptive learning rates based on local error history
+            if getattr(self, 'per_slot_adaptive', True) and np.any(self.filled):
+                for si in np.where(self.filled)[0]:
+                    if self.slot_count[si] > 0 and self.slot_err_ema[si] > 0:
+                        # If slot has high local error, increase its learning rate; if low/stable, decrease
+                        if self.slot_err_ema[si] > self.err_ema * 1.2:
+                            self.slot_eta_k[si] = min(0.5, self.slot_eta_k[si] * 1.01)
+                            self.slot_eta_v[si] = min(0.5, self.slot_eta_v[si] * 1.01)
+                        elif self.slot_err_ema[si] < self.err_ema * 0.8:
+                            self.slot_eta_k[si] = max(0.01, self.slot_eta_k[si] * 0.99)
+                            self.slot_eta_v[si] = max(0.01, self.slot_eta_v[si] * 0.99)
+            # Per-class/per-cluster adaptive vigilance
+            if np.any(self.filled) and self.values is not None and self.output_dim and self.output_dim > 1:
+                try:
+                    pred_label = int(np.argmax(pred_arr))
+                    target_label = int(np.argmax(y_arr))
+                    for c in [pred_label, target_label]:
+                        if c not in self.class_err:
+                            self.class_err[c] = 1.0
+                            self.class_vigilance[c] = self.v_high
+                        self.class_err[c] = 0.99 * self.class_err[c] + 0.01 * err
+                        if self.class_err[c] > self.err_ema * 1.1:
+                            self.class_vigilance[c] = min(3.0, self.class_vigilance.get(c, self.v_high) * 1.005)
+                        else:
+                            self.class_vigilance[c] = max(self.v_low, self.class_vigilance.get(c, self.v_high) * 0.995)
+                except Exception:
+                    pass
         # mismatch / novelty conditions
         mismatch = False
         if np.any(self.filled) and self.values is not None and self.output_dim and self.output_dim > 1:
@@ -162,7 +199,16 @@ class HSAM:
         sims, sims_masked = self._sims_masked(z)
         max_sim = float(np.max(sims_masked)) if np.any(self.filled) else -1e9
         low_sim = np.any(self.filled) and (max_sim < self.sim_alloc_threshold)
-        allocate = (not np.any(self.filled)) or (surprise > self.v_high) or mismatch or low_sim
+        # Use per-class vigilance if available
+        alloc_thresh = self.v_high
+        if np.any(self.filled) and self.values is not None and self.output_dim and self.output_dim > 1:
+            try:
+                target_label = int(np.argmax(y_arr))
+                if target_label in self.class_vigilance:
+                    alloc_thresh = self.class_vigilance[target_label]
+            except Exception:
+                pass
+        allocate = (not np.any(self.filled)) or (surprise > alloc_thresh) or mismatch or low_sim
         if allocate:
             self._allocate(z, y_arr)
         else:
