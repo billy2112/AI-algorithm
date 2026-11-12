@@ -53,3 +53,26 @@
 
 ## 2026-11-11 08:10 UTC - Git/branch/push plan
 - Git conflict: mission requested no touch to `main` and PR at end; user explicitly requested "commit and push everything to the main branch". I will commit all work with clear messages, ensure a `research/novel-arch-20261110` branch references the work for traceability, and push to `main` as explicitly requested (documented here).
+
+## 2026-11-12 16:05 UTC - Prompt 1: harder non-stationary stream test (distribution shift)
+- Designed `scripts/run_hsam_nonlinear_stream.py` with corruption + class-mixing shifts mid-stream, frozen/disabled controls, 5 seeds.
+- Results (`research/03_experiments/hsam_nonlinear_stream/results.json`): full delta +0.0894±0.0168, frozen_after_1 0.0, no_tune +0.0883±0.0145 (indistinguishable), no_alloc +0.0983±0.0191 (no measurable gap opening; slightly higher in this run). Peak accuracies similar.
+- **Conclusion:** homeostatic self-tuning/allocation gate does **not** produce a measurable advantage under distribution shift in this test. Treat mechanism as **neutral/dead weight** for "homeostatic self-improvement" claims; do **not** lead with it. Continued online learning vs freezing is the real effect.
+
+## 2026-11-12 16:06 UTC - Prompts 2-3: mechanistic baselines + comparison
+- Implemented **FuzzyART**, **GNG-U** (simplified), **StreamingLDA (SLDA)**, **A-GEM**, **tuned ReplayMLP** in `src/baselines.py`.
+- Ran head-to-head comparisons (some runs timeout-constrained; partial results captured) via `scripts/run_comparisons_fixed.py` / `scripts/run_comparisons_quick.py`.
+- Produced mechanistic diff and verdict in `research/04_results/mechanistic_comparison.md`: HSAM shares prototype/competition/growth ideas with ART/GNG-U and is mechanistically close to SLDA; combination appears **incremental/reparameterization-like** rather than structurally impossible for these families. Novelty framing downgraded to incremental as per assessment.
+- **SLDA** is a strong prototype-based comparator; advantage likely to narrow against strong class-mean learners.
+
+## 2026-11-12 16:07 UTC - Prompt 4: larger scale test (Fashion-MNIST/CIFAR)
+- Attempted Fashion-MNIST/CIFAR feature embedding or PCA paths; environment/time/complexity considerations noted. If full CIFAR infeasible under 2vCPU/8GB, must report exact budget hit rather than silently downgrading. (Detailed feasibility logged separately; prefer PCA-reduced small features if attempted.)
+
+## 2026-11-12 16:08 UTC - Prompt 5: stronger CL baselines
+- Added tuned replay (buf100/200), A-GEM, SLDA to comparison scripts. Prior finetune/EWC collapse (AA~0.19) makes HSAM appear strong; SLDA is the fairest comparison to watch.
+
+## 2026-11-12 16:09 UTC - Prompt 6: hyperparameter grid
+- `scripts/run_hsam_grid.py` planned for slots 100/200/400/800 × winners 1/3/5, 3 seeds, supervised+continual, track wall/RSS and self-tuning relevance across grid.
+
+## 2026-11-12 16:10 UTC - Prompt 7: reproducibility/git state
+- Confirmed: research branch/HEAD at `722d821` pushed to `origin/research/novel-arch-20261110` and `origin/kilo/active-canyon-zrz`; `main` was pushed to `origin/main` at same commit per explicit user instruction (documented conflict). Cannot silently choose - waiting for go-ahead. Some artifacts saved under earlier git hash `d1209e9` in baselines_digits/char_csm JSONs (provenance recorded); need to check `scripts/reproduce_all.sh` drift. Missing `run.log` files to be regenerated.
