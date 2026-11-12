@@ -128,6 +128,12 @@ class HSAM:
         self.utility[j] = self.u0
         self.filled[j] = True
         self.allocations += 1
+        # initialize per-slot tracking for new slot
+        if getattr(self, 'per_slot_adaptive', False):
+            self.slot_eta_k[j] = self.eta_k
+            self.slot_eta_v[j] = self.eta_v
+            self.slot_err_ema[j] = 1.0
+            self.slot_count[j] = 0.0
         return j
 
     def learn(self, x, y):
@@ -218,14 +224,20 @@ class HSAM:
             ex = np.exp(ws - np.max(ws))
             w = ex / (ex.sum() + 1e-8)
             for wi, idx in zip(w, widx):
-                self.keys[idx] = (1 - self.eta_k * wi) * self.keys[idx] + (self.eta_k * wi) * z
+                # per-slot adaptive learning rates
+                eta_k = self.slot_eta_k[idx] if getattr(self, 'per_slot_adaptive', False) else self.eta_k
+                eta_v = self.slot_eta_v[idx] if getattr(self, 'per_slot_adaptive', False) else self.eta_v
+                self.keys[idx] = (1 - eta_k * wi) * self.keys[idx] + (eta_k * wi) * z
                 self.keys[idx] /= np.linalg.norm(self.keys[idx]) + 1e-8
                 if self.values is not None:
-                    self.values[idx] = self.values[idx] + self.eta_v * wi * (y_arr - self.values[idx])
+                    self.values[idx] = self.values[idx] + eta_v * wi * (y_arr - self.values[idx])
                 else:
-                    self.scalar_values[idx] = self.scalar_values[idx] + self.eta_v * wi * (
+                    self.scalar_values[idx] = self.scalar_values[idx] + eta_v * wi * (
                         float(y_arr) - self.scalar_values[idx]
                     )
+                # track per-slot local error history
+                self.slot_err_ema[idx] = 0.99 * self.slot_err_ema[idx] + 0.01 * err
+                self.slot_count[idx] += 1.0
                 self.utility[idx] = self.decay * self.utility[idx] + float(wi) * max(
                     0.0, 1.0 - 0.5 * surprise
                 )
