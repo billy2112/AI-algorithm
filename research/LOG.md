@@ -89,3 +89,15 @@
 - torchvision/tensorflow not available
 - No working data loader available; stopping without improvised fallback
 - Marked as invalid/exploratory in report; digits remain primary evidence
+
+## 2026-11-13 15:15 UTC - HSAM_Simplified variant + benchmark (reframed deliverable)
+- Added HSAM_Simplified in src/candidates.py: HSAM without homeostatic self-tuning controller (proven dead end). Keeps fixed random projection, k-winner softmax retrieval, local delta key/value updates, surprise-gated allocation, utility replacement.
+- Created scripts/run_simplified_benchmark.py comparing HSAM_Simplified vs original HSAM vs SLDA vs tuned replay (buf100/buf200) vs GNG-U vs FuzzyART on sklearn digits supervised + split-digits-5 continual (5 seeds).
+- Key results (saved to research/03_experiments/simplified_benchmark/results.json):
+  * Supervised: simplified matches original exactly (s200: 0.9622 vs 0.9606; s400: 0.9722 vs 0.9711)
+  * Continual: simplified matches original exactly (s200 AA 0.9300 vs 0.9317 FM 0.0707 vs 0.0679; s400 AA 0.9323 vs 0.9329 FM 0.0657 vs 0.0670)
+  * SLDA: AA 0.9376±0.0109, FM 0.0311±0.0106 (best FM, fastest 0.174s)
+  * replay_buf200: AA 0.9594±0.0057, FM 0.0207±0.0123 (best AA)
+  * HSAM below replay_buf200, near replay_buf100; SLDA and replay outperform HSAM
+- Updated FINAL_REPORT.md: reframed as "lightweight ART/GNG-U-family continual learner, not novel architecture"; updated executive summary, sections 7.2/7.3/7.4/7.5, claims table, limitations, git notes.
+- Committed to kilo/active-canyon-zrz only (commit 752e884). NOT pushed to main — awaiting explicit go-ahead.

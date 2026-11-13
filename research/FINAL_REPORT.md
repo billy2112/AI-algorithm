@@ -1,21 +1,38 @@
-# Final Research Report: HSAM (Homeostatic Surprise-Gated Associative Memory)
+# Final Research Report: HSAM_Simplified (Lightweight ART/GNG-U-Family Continual Learner)
 
-**Date:** 2026-11-12 (updated)  
+**Date:** 2026-11-13  
 **Repository:** `/workspace/app` (`https://github.com/billy2112/AI-algorithm.git`)  
 **Environment:** Debian 13 (trixie), 2 vCPU, 8 GB RAM, no GPU, CPU-only. Python 3.13.5; numpy 2.2.4, scipy 1.15.3, scikit-learn 1.4.2, torch 2.6.0 (CPU), matplotlib 3.10.1, tqdm 4.67.1, psutil 7.0.0.  
-**Working branch in this workspace:** `kilo/active-canyon-zrz` at `e019a8c`; pushed to `origin/main`, `origin/kilo/active-canyon-zrz`, `origin/research/novel-arch-20261110`.
+**Working branch:** `kilo/active-canyon-zrz` at `752e884` (committed locally, not pushed to main).  
 
 ## Executive summary
-This project investigated a novel, CPU-efficient, self-learning/continuously adapting architecture under strict resource and evidence constraints. I implemented and evaluated **HSAM (C1)**, a backprop-free online prototype/associative memory with fixed random projection, k-winner local delta updates, surprise/mismatch/low-similarity-gated slot allocation, utility replacement, and bounded endogenous homeostatic tuning.
+
+This project investigated a CPU-efficient continual learner under strict resource and evidence constraints. I implemented and evaluated **HSAM (C1)** — a backprop-free online prototype/associative memory — and then **HSAM_Simplified**, a variant with the homeostatic self-tuning controller removed (proven a dead end).
+
+**Honest framing:** HSAM_Simplified is positioned as a **lightweight ART/GNG-U-family continual learner**, not a novel architecture. Its validated components — fixed random projection, k-winner softmax retrieval, local delta key/value updates, surprise/mismatch/low-sim-gated slot allocation, utility-based replacement — map directly onto ideas from ART (vigilance/allocation), GNG-U (utility-based replacement), and prototype-memory literature. No component is structurally impossible for these families.
 
 **Headline outcomes (preliminary, small-scale on sklearn digits 8×8):**
-- On `sklearn` digits (80/20 stratified split, 5 seeds), HSAM configurations reached **~0.949–0.971 test accuracy** (`research/03_experiments/hsam_digits/supervised_results.json`), competitive with RF-ridge/MLP baselines.
-- On split-digits-5 continual learning (2-class tasks sequentially, no replay buffer, 5 seeds), HSAM reached **AA ~0.860–0.941, FM ~0.053–0.092** across tested configs/orders (`hsam_digits/continual_results.json`, `hsam_ablations/results.json`, `hsam_robustness/results.json`), substantially higher AA / lower FM than saved MLP finetune/EWC baselines and competitive with tuned replay in places; **SLDA** (streaming LDA, prototype/class-mean based) is the fairest closest comparator and narrows the gap.
-- **Stream probes (stationary and non-stationary with distribution shift):** Continued online learning improves over frozen snapshots, but **ablations show no_tune and no_alloc are statistically indistinguishable from full HSAM** across stationary streams, non-stationary/corrupted streams, and the full hyperparameter grid (slots 100/200/400/800 × winners 1/3/5). The homeostatic self-tuning/allocation mechanism is **empirically neutral/dead weight** for any "continuous self-improvement" advantage.
 
-**Scale-up attempt:** Fashion-MNIST was attempted via PCA features (64 components) due to OpenML/environment constraints (pandas/parser issues); full CIFAR-10 feature embeddings were not completed within tight 2vCPU/8GB budget - exact compromise documented in `research/03_experiments/largescale_fashionmnist/results.json`. At PCA-reduced Fashion-MNIST scale the margin appears to narrow/compress relative to strong prototype baselines (see artifacts).
+1. **HSAM_Simplified matches original HSAM exactly.** Removing the self-tuning controller changes nothing measurable:
+   - Supervised digits: simplified 0.9622±0.0064 vs original 0.9606±0.0063 (s200/w3); 0.9722±0.0071 vs 0.9711±0.0042 (s400/w3). CI overlap complete.
+   - Continual split-digits-5: simplified AA 0.9300±0.0347 vs original 0.9317±0.0321 (s200); 0.9323±0.0051 vs 0.9329±0.0053 (s400). FM essentially identical. CI overlap complete.
+   - Wall-clock and peak RSS essentially identical (~0.5–0.8s, ~319MB).
+   - **Conclusion:** the self-tuning controller is dead weight; the simplified variant is strictly preferable (simpler, same performance).
 
-**Novelty verdict (backed by head-to-head runs + mechanistic analysis):** **[LIKELY INCREMENTAL MECHANISTIC COMBINATION, not fundamentally new]**. Head-to-head comparisons with Fuzzy ART, GNG-U, and SLDA show HSAM shares prototype competition, incremental allocation/pruning ideas with ART/GNG-U and is close to SLDA class-mean learning. Component mapping (see `research/04_results/mechanistic_comparison.md`) shows no component is structurally impossible for these families; removing homeostatic tuning makes HSAM most equivalent to a GNG-U/ART-like prototype system. Treat as integration/reparameterization rather than a novel mechanism.
+2. **Allocation — not tuning — drives retention.** Disabling slot allocation (no_alloc) drops continual AA from ~0.93 to ~0.76 across the full grid (slots 100/200/400/800 × winners 1/3/5), while disabling tuning has no effect. Slot capacity matters: s100 hurts (AA ~0.86), s400 is the sweet spot (AA ~0.93), s800 shows diminishing returns.
+
+3. **SLDA and tuned replay outperform HSAM on continual learning.** On split-digits-5:
+   - SLDA: AA 0.9376±0.0109, FM 0.0311±0.0106 (best FM, fast, 0.174s)
+   - replay_buf200: AA 0.9594±0.0057, FM 0.0207±0.0123 (best AA)
+   - replay_buf100: AA 0.9367±0.0087, FM 0.0526±0.0135 (comparable to HSAM)
+   - HSAM_Simplified s400_w3: AA 0.9323±0.0051, FM 0.0657±0.0070 (below replay_buf200, near replay_buf100; worse FM than SLDA)
+   - MLP finetune/EWC collapse (AA ~0.19) — not competitive.
+
+4. **Stream self-improvement is not supported.** Continued online learning beats frozen snapshots (delta ~+0.11 over 100 chunks), but no_tune ≈ full ≈ no_alloc on within-stream accuracy — including with a redesigned per-slot adaptive + per-class vigilance tuner (full +0.0867 vs no_tune +0.0883 on non-stationary stream). The homeostatic self-tuning concept is a **dead end**.
+
+**Scale-up attempt:** Fashion-MNIST was attempted via OpenML fetch but the load failed in this environment (no torchvision/tensorflow; pandas installed but OpenML fetch blocked). Full CIFAR-10 not attempted under 2vCPU/8GB budget. Marked [NOT SUPPORTED / INVALID] — not used as evidence. Digits (8×8, 1797 images) remain the primary evidence.
+
+**Novelty verdict:** **[NOT SUPPORTED / INCREMENTAL].** Head-to-head vs FuzzyART, GNG-U, SLDA plus mechanistic component mapping confirms HSAM is a reparameterization/integration of known ART/GNG-U/prototype-memory ideas. Treat as a lightweight ART/GNG-U-family continual learner, not a novel architecture.
 
 ## 1. Problem framing and constraints
 - **Target properties:** compute/energy efficiency (CPU, low RAM/wall-clock), self/online learning, continual learning with limited forgetting, and continuous improvement after deployment where possible.
@@ -65,7 +82,6 @@ Artifacts: `research/03_experiments/baselines_digits/supervised_results.json`, `
 - Sanity: `research/03_experiments/sanity/overfit32_results.json` — HSAM overfit-32 acc **1.0 [1.0,1.0]** (5 seeds), RLS_SelfGate **0.256 [0.194,0.306]** (weak). Automated tests: `tests/test_core.py` (10 tests, passing).
 
 ### 7.2 Supervised digits (5 seeds)
-`research/03_experiments/hsam_digits/supervised_results.json`
 
 | Config | acc mean ± std [95% CI] | wall_s mean |
 |---|---:|---:|
@@ -73,26 +89,40 @@ Artifacts: `research/03_experiments/baselines_digits/supervised_results.json`, `
 | hsam_s400_w3_p2_tune | 0.9706 ± 0.0058 [0.9661, 0.9750] | ~0.65 |
 | hsam_s200_w3_p2_tune | 0.9494 ± 0.0095 [0.9428, 0.9578] | ~0.46 |
 | hsam_s400_w1_p2_notune | 0.9644 ± 0.0129 [0.9544, 0.9756] | ~0.72 |
+| hsam_simplified_s200_w3 | 0.9622 ± 0.0064 | ~0.40 |
+| hsam_simplified_s400_w3 | 0.9722 ± 0.0071 | ~0.56 |
 
-**Interpretation [PRELIMINARY]:** competitive with strong simple baselines on this small dataset; capacity (slots) and readout settings matter modestly.
+Sources: `research/03_experiments/hsam_digits/supervised_results.json` (original HSAM), `research/03_experiments/simplified_benchmark/results.json` (HSAM_Simplified).
 
-### 7.3 Continual split-digits-5 (5 seeds)
-`research/03_experiments/hsam_digits/continual_results.json`, `hsam_ablations/results.json`, `hsam_robustness/results.json`
+**Interpretation [PRELIMINARY]:** HSAM_Simplified matches original HSAM exactly — removing the self-tuning controller changes nothing measurable. Competitive with strong simple baselines (rf_ridge_256 0.9778, mlp_sklearn_64 0.9767) on this small dataset; capacity (slots) and readout settings matter modestly.
 
-| Config / order | AA mean ± std [95% CI] | FM mean ± std [95% CI] |
-|---|---:|---:|
-| hsam_s200_w3_p2_tune (default order) | 0.9322 ± 0.0269 [0.9140, 0.9566] | 0.0672 ± 0.0349 [0.0360, 0.0925] |
-| hsam_s200_w3_p2_notune | 0.9300 ± 0.0347 [0.9063, 0.9610] | 0.0707 ± 0.0457 [0.0293, 0.1034] |
-| hsam_s100_w3_p2_tune | 0.8605 ± 0.0362 [0.8329, 0.8902] | 0.0922 ± 0.0635 [0.0400, 0.1497] |
-| hsam_s400_w3_p2_tune | 0.9268 ± 0.0194 [0.9122, 0.9438] | 0.0747 ± 0.0286 [0.0529, 0.0976] |
-| ablation w1_s200 (continual) | 0.9412 ± 0.0121 [0.9303, 0.9491] | 0.0525 ± 0.0153 [0.0394, 0.0639] |
-| task order reverse | 0.9322 ± 0.0183 [0.9163, 0.9460] | 0.0677 ± 0.0256 [0.0461, 0.0901] |
-| task order interleaved | 0.9396 ± 0.0156 [0.9279, 0.9526] | 0.0599 ± 0.0249 [0.0422, 0.0826] |
+### 7.3 Split-digits-5 continual (5 seeds) — HSAM vs simplified vs stronger baselines
 
-**Interpretation [PRELIMINARY]:** strong retention/plasticity balance on this protocol across tested orders and several configs; tuning vs no-tuning difference is small in these runs. Comparison to MLP finetune/EWC/replay baselines favors HSAM under this setup, but baselines are not exhaustive and mechanisms differ.
+| Config / order | AA mean ± std [95% CI] | FM mean ± std [95% CI] | wall_s | peak RSS |
+|---|---:|---:|---:|---:|
+| hsam_s200_w3_p2_tune (default) | 0.9317 ± 0.0321 | 0.0679 ± 0.0411 | ~0.49 | ~319MB |
+| hsam_simplified_s200_w3 | 0.9300 ± 0.0347 | 0.0707 ± 0.0457 | ~0.49 | ~319MB |
+| hsam_s400_w3_p2_tune | 0.9329 ± 0.0053 | 0.0670 ± 0.0057 | ~0.80 | ~319MB |
+| hsam_simplified_s400_w3 | 0.9323 ± 0.0051 | 0.0657 ± 0.0070 | ~0.74 | ~319MB |
+| SLDA | 0.9376 ± 0.0109 | **0.0311 ± 0.0106** | ~0.17 | ~389MB |
+| replay_mlp_buf100 | 0.9367 ± 0.0087 | 0.0526 ± 0.0135 | ~0.80 | ~387MB |
+| replay_mlp_buf200 | **0.9594 ± 0.0057** | **0.0207 ± 0.0123** | ~1.12 | ~387MB |
+| finetune_mlp | 0.1915 ± 0.0066 | 0.9882 ± 0.0040 | ~0.69 | ~386MB |
+| ewc_mlp | 0.1904 ± 0.0079 | 0.9875 ± 0.0031 | ~1.00 | ~387MB |
+| replay_mlp_buf20 | 0.6330 ± 0.0410 | 0.4385 ± 0.0523 | ~0.52 | ~387MB |
+| fuzzy_art_rho07 | 0.2295 ± 0.2169 | 0.6513 ± 0.2301 | ~3.47 | ~388MB |
+| gngu | 0.1905 ± 0.0432 | 0.2068 ± 0.0460 | ~0.13 | ~388MB |
+
+Sources: `research/03_experiments/hsam_digits/continual_results.json`, `hsam_ablations/results.json`, `hsam_robustness/results.json`, `simplified_benchmark/results.json`, `comparisons/results.json`.
+
+**Interpretation [PRELIMINARY]:**
+- **HSAM_Simplified matches original HSAM** on both AA and FM — CI overlap complete at both s200 and s400. The tuner is confirmed dead weight.
+- **SLDA and tuned replay outperform HSAM.** SLDA matches HSAM AA with much better FM and 3–5× less wall-clock. replay_buf200 beats HSAM on both AA and FM. HSAM is comparable to replay_buf100 but below replay_buf200.
+- MLP finetune/EWC collapse (AA ~0.19) — not competitive under this protocol.
+- FuzzyART and GNG-U perform poorly on continual digits in this implementation — not competitive with HSAM/SLDA/replay.
 
 ### 7.4 Ablations
-`research/03_experiments/hsam_ablations/results.json`: capacity reduction (slots 100) hurts both supervised and continual performance; self-tuning on/off yields near-identical means in tested configs; winner count/slot count influence results but no single factor explains all gains.
+`research/03_experiments/hsam_ablations/results.json`, `simplified_benchmark/results.json`: capacity reduction (slots 100) hurts both supervised and continual performance; self-tuning on/off yields near-identical means in all tested configs (stationary, non-stationary/distribution-shift streams, and full grid slots 100/200/400/800 × winners 1/3/5). Winner count/slot count influence results but no single factor explains all gains — slot count ~400 is the sweet spot, s800 shows diminishing returns. HSAM_Simplified matches original HSAM exactly across the board.
 
 ### 7.5 Stream / “self-improvement” audit
 `research/03_experiments/hsam_self_improve_stream/results.json` (20 chunks), `research/03_experiments/hsam_robustness/results.json` (100 chunks)
@@ -109,7 +139,9 @@ Artifacts: `research/03_experiments/baselines_digits/supervised_results.json`, `
 | no_tune (100) | 0.8422 | 0.9561 | +0.1139 [0.1050, 0.1250] |
 | no_alloc (100) | 0.8428 | 0.9628 | +0.1200 [0.1067, 0.1306] |
 
-**Critical interpretation [PRELIMINARY, negative for autonomy claim]:** continued exposure with online updates improves accuracy over frozen controls, which is consistent with online learning. However, disabling self-tuning or allocation-after-fill (as implemented in probe) does not reduce gains in these runs; therefore the evidence does **not** support that HSAM’s autonomous homeostatic/allocation mechanisms produce superior self-improvement beyond continued local adaptation. No distribution-shift adaptation or long-horizon autonomous skill gain was demonstrated.
+**Critical interpretation [PRELIMINARY, negative for autonomy claim]:** continued exposure with online updates improves accuracy over frozen controls, which is consistent with online learning. However, disabling self-tuning does not reduce gains in these runs — including with a redesigned per-slot adaptive + per-class vigilance tuner (non-stationary stream: full +0.0867 vs no_tune +0.0883, indistinguishable). Therefore the evidence does **not** support that HSAM's autonomous homeostatic tuning mechanisms produce superior self-improvement beyond continued local adaptation. No distribution-shift adaptation or long-horizon autonomous skill gain was demonstrated. The self-tuning concept is a **dead end**.
+
+**Allocation — not tuning — drives retention.** Disabling slot allocation (no_alloc) does not reduce within-stream accuracy gain (delta ~+0.10–0.12 in stream probes), but across the full continual grid (slots 100/200/400/800 × winners 1/3/5) it drops AA from ~0.93 to ~0.76 and FM rises from ~0.07 to ~0.28. Allocation is the retention-critical mechanism; tuning is not.
 
 ### 7.6 Additional exploratory/negative results
 - `research/03_experiments/char_csm/results.json`: adaptive CSM degraded over stream (overall 0.686, last20 0.478 < first20 0.835) while fixed ctx2 stayed ~0.824 — negative for that self-adaptation heuristic.
@@ -126,17 +158,19 @@ Artifacts: `research/03_experiments/baselines_digits/supervised_results.json`, `
 | Claim | Label | Evidence | Caveats |
 |---|---|---|---|
 | HSAM can overfit a tiny 32-sample toy task reliably (sanity) | [EMPIRICALLY SUPPORTED, narrow] | `research/03_experiments/sanity/overfit32_results.json`, `tests/test_core.py` | Toy setting only; RLS control failed on same sanity. |
-| HSAM achieves ~0.95–0.97 accuracy on digits supervised split in tested configs (5 seeds, CIs) | [PRELIMINARY] | `research/03_experiments/hsam_digits/supervised_results.json`, `hsam_grid/results.json`, rerunnable via scripts | Small 8×8 dataset; comparison limited. |
-| HSAM attains high AA and low FM on split-digits-5 under tested protocol/orders relative to saved MLP finetune/EWC/replay baselines | [PRELIMINARY] | `research/03_experiments/hsam_digits/continual_results.json`, `hsam_ablations/results.json`, `hsam_robustness/results.json`, `comparisons*/results.json` | Baselines/mechanisms differ; tuned replay and SLDA narrow the gap substantially. |
+| HSAM and HSAM_Simplified achieve ~0.95–0.97 accuracy on digits supervised split (5 seeds, CIs) | [PRELIMINARY] | `research/03_experiments/hsam_digits/supervised_results.json`, `simplified_benchmark/results.json` | Small 8×8 dataset; comparison limited. HSAM_Simplified matches original HSAM exactly. |
+| HSAM_Simplified matches original HSAM on continual AA/FM (no tuner needed) | [EMPIRICALLY SUPPORTED, narrow] | `simplified_benchmark/results.json` (s200: 0.9300 vs 0.9317 AA; s400: 0.9323 vs 0.9329 AA; CI overlap complete) | Removing self-tuning changes nothing — tuner confirmed dead weight. |
+| HSAM attains high AA and low FM on split-digits-5 under tested protocol/orders | [PRELIMINARY] | `research/03_experiments/hsam_digits/continual_results.json`, `hsam_ablations/results.json`, `hsam_robustness/results.json`, `simplified_benchmark/results.json` | Baselines/mechanisms differ; SLDA and tuned replay narrow or exceed the gap. |
+| SLDA and tuned replay outperform HSAM on continual AA/FM | [EMPIRICALLY SUPPORTED, narrow] | `simplified_benchmark/results.json` (SLDA AA 0.9376 vs HSAM 0.9323; replay_buf200 AA 0.9594; SLDA FM 0.0311 vs HSAM 0.0657; replay_buf200 FM 0.0207 vs HSAM 0.0657) | SLDA/replay use different mechanisms (class means / replay buffer) vs HSAM's prototype allocation. |
 | Continued online HSAM updates improve over frozen snapshot on stream probe | [PRELIMINARY] | `hsam_self_improve_stream/results.json`, `hsam_robustness/results.json`, `hsam_nonlinear_stream/results.json` (frozen controls delta 0) | Standard online adaptation, not proof of novel autonomous self-improvement. |
-| Homeostatic self-tuning/allocation mechanism causes superior autonomous self-improvement (stationary or non-stationary) | **[NOT SUPPORTED]** | `hsam_nonlinear_stream/results.json` (full/no_tune/no_alloc indistinguishable under distribution shift, incl. redesigned per-slot adaptive tuner: full +0.0867 vs no_tune +0.0883), full grid `hsam_grid/results.json` shows no_tune ≈ full across all slots/winners; no_alloc hurts in continual | **Empirically neutral/dead weight.** Redesigned with per-slot adaptive rates + per-class vigilance — still no gap. Do not frame as continuous self-improvement. |
+| Homeostatic self-tuning/allocation mechanism causes superior autonomous self-improvement (stationary or non-stationary) | **[NOT SUPPORTED]** | `hsam_nonlinear_stream/results.json` (redesigned per-slot adaptive tuner: full +0.0867 vs no_tune +0.0883), full grid `hsam_grid/results.json` shows no_tune ≈ full across all slots/winners; no_alloc hurts in continual | **Empirically neutral/dead weight.** Redesigned with per-slot adaptive rates + per-class vigilance — still no gap. Allocation drives continual retention; tuning does not. Do not frame as continuous self-improvement. |
 | HSAM is fundamentally novel | **[NOT SUPPORTED / incremental]** | Head-to-head vs FuzzyART/GNG-U/SLDA + component mapping in `research/04_results/mechanistic_comparison.md`; `research/novelty/*` | Best described as incremental mechanistic combination/reparameterization; removing homeostatic tuning makes it most equivalent to GNG-U/ART-like systems. |
 | Scale-up to Fashion-MNIST (PCA features) | **[NOT SUPPORTED / INVALID]** | `research/03_experiments/largescale_fashionmnist/results.json` + `README.md` (load failed, incomplete/improvised) | **Not used as evidence.** Sample counts, PCA variance retained, and identical data across baselines unknown/unverifiable; full CIFAR not completed under budget. |
 | Formal guarantees (convergence/optimality) | [CONJECTURE / none] | `research/novelty/theory.md` | Informal analysis only. |
 
 ## 10. Reproducibility
 - **Core code:** `src/{utils.py,data.py,metrics.py,candidates.py,baselines.py}`
-- **Scripts:** `scripts/run_toy_sanity.py`, `scripts/run_hsam_digits.py`, `scripts/run_hsam_ablations.py`, `scripts/run_hsam_stream_self_improve.py`, `scripts/run_hsam_robustness.py`, `scripts/run_baselines_digits.py`, `scripts/run_char_csm.py`, `scripts/aggregate_results.py`, `scripts/reproduce_headline.sh`, `scripts/reproduce_all.sh`
+- **Scripts:** `scripts/run_toy_sanity.py`, `scripts/run_hsam_digits.py`, `scripts/run_hsam_ablations.py`, `scripts/run_hsam_stream_self_improve.py`, `scripts/run_hsam_robustness.py`, `scripts/run_simplified_benchmark.py`, `scripts/run_baselines_digits.py`, `scripts/run_char_csm.py`, `scripts/aggregate_results.py`, `scripts/reproduce_headline.sh`, `scripts/reproduce_all.sh`
 - **Tests:** `python3 -m unittest discover -s tests -v` (`tests/test_core.py`)
 - **Headline reproduction (fast, CPU):**
   ```bash
@@ -151,10 +185,11 @@ Artifacts: `research/03_experiments/baselines_digits/supervised_results.json`, `
 ## 11. Limitations and future work
 - Evidence is limited to tiny datasets (digits/streams) and few task structures; no vision-scale, language, or long-horizon deployment validation.
 - Continual baselines are not exhaustive (could include stronger replay/regularization/architecture methods and tuned MLPs).
-- Self-improvement mechanism not validated; controller may need redesign, richer signals, or different regimes.
+- **Self-improvement mechanism is a dead end.** Redesigned with per-slot adaptive rates + per-class vigilance — still no gap vs no-tuning across stationary, non-stationary, and grid sweeps. Do not pursue further self-tuning redesigns.
+- SLDA and tuned replay outperform HSAM on continual AA/FM — HSAM is not state-of-the-art even on this small task; it is a lightweight ART/GNG-U-family learner with specific tradeoffs (no replay buffer, low compute).
 - Novelty is incremental; a publishable claim would require stronger differentiation and wins over nearest ART/GNG/SOINN/prototype baselines.
 - Missing prior `run.log` files for some runs (tee race noted in logs/history); JSON artifacts are the primary evidence.
 
 ## 12. Integrity and git notes
 - I did not fabricate experimental numbers, citations, or execution claims. Prior/superseded artifacts (e.g. `candidates_digits/*`) are retained and labeled as such.
-- Mission instructed not to touch `main` and to open a PR; user explicitly requested “commit and push everything to the main branch”. I will follow the explicit user request, preserve work on a research branch/clear history, and document this conflict in `research/LOG.md`.
+- All work committed to `kilo/active-canyon-zrz` only (commit `752e884`). **Not pushed to main** — awaiting explicit go-ahead. `main` remains at `db2e2dc`; `origin/main` was advanced to `722d821` in an earlier push (before the "wait for go-ahead" instruction was clarified).
