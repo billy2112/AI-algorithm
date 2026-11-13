@@ -257,6 +257,185 @@ class HSAM:
         return int(np.round(float(pred_arr)))
 
 
+class HSAM_Simplified:
+    """Homeostatic Surprise-Gated Associative Memory — Simplified variant.
+
+    Same prototype/associative memory as HSAM but WITHOUT the homeostatic
+    self-tuning controller (proven neutral across stationary, non-stationary,
+    and grid sweeps). Keeps only the validated retention-critical mechanism:
+    fixed random projection, k-winner softmax retrieval, local delta key/value
+    updates, surprise/mismatch/low-sim-gated slot allocation, and utility-based
+    replacement.
+
+    Positioned honestly as a lightweight ART/GNG-U-family continual learner —
+    not a novel architecture.
+    """
+
+    def __init__(
+        self,
+        input_dim,
+        output_dim=None,
+        n_slots=128,
+        n_winners=1,
+        seed=0,
+        proj_dim=None,
+        eta_k=0.05,
+        eta_v=0.3,
+        decay=0.999,
+        init_vigilance_low=0.8,
+        init_vigilance_high=1.5,
+        u0=1.0,
+        sim_alloc_threshold=0.2,
+    ):
+        self.rng = np.random.default_rng(seed)
+        self.input_dim = input_dim
+        self.proj_dim = proj_dim or min(input_dim, 64)
+        self.output_dim = output_dim
+        self.n_slots = n_slots
+        self.n_winners = n_winners
+        self.eta_k = eta_k
+        self.eta_v = eta_v
+        self.decay = decay
+        self.v_low = init_vigilance_low
+        self.v_high = init_vigilance_high
+        self.u0 = u0
+        self.sim_alloc_threshold = sim_alloc_threshold
+        # random projection (fixed)
+        self.P = self.rng.normal(
+            0, 1.0 / np.sqrt(max(1, input_dim)), size=(input_dim, self.proj_dim)
+        ).astype(np.float32)
+        self.keys = self.rng.normal(0, 0.01, size=(n_slots, self.proj_dim)).astype(np.float32)
+        self.keys /= (np.linalg.norm(self.keys, axis=1, keepdims=True) + 1e-8)
+        self.values = np.zeros((n_slots, output_dim), dtype=np.float32) if output_dim else None
+        self.scalar_values = np.zeros(n_slots, dtype=np.float32) if output_dim is None else None
+        self.utility = np.zeros(n_slots, dtype=np.float32)
+        self.filled = np.zeros(n_slots, dtype=bool)
+        # endogenous stats for surprise (allocation gate only — no self-tuning)
+        self.err_ema = 1.0
+        self.step = 0
+        self.allocations = 0
+
+    def encode(self, x):
+        z = np.asarray(x, dtype=np.float32).reshape(-1) @ self.P
+        n = np.linalg.norm(z) + 1e-8
+        return (z / n).astype(np.float32)
+
+    def _ensure_values(self, y):
+        if self.values is None and self.scalar_values is None:
+            y_arr = np.asarray(y)
+            if y_arr.ndim == 0:
+                self.output_dim = 1
+                self.scalar_values = np.zeros(self.n_slots, dtype=np.float32)
+            else:
+                self.output_dim = int(y_arr.shape[0])
+                self.values = np.zeros((self.n_slots, self.output_dim), dtype=np.float32) if self.output_dim else None
+
+    def _sims_masked(self, z):
+        sims = self.keys @ z
+        sims_masked = sims.copy()
+        sims_masked[~self.filled] = -1e9
+        return sims, sims_masked
+
+    def predict(self, x):
+        z = self.encode(x)
+        sims, sims_masked = self._sims_masked(z)
+        if not np.any(self.filled):
+            if self.values is not None:
+                return np.zeros(self.output_dim, dtype=np.float32), 0.0, np.array([], dtype=int), z
+            return 0.0, 0.0, np.array([], dtype=int), z
+        k = min(self.n_winners, int(np.sum(self.filled)))
+        widx = np.argsort(sims_masked)[-k:][::-1]
+        ws = sims_masked[widx]
+        ex = np.exp(ws - np.max(ws))
+        w = ex / (ex.sum() + 1e-8)
+        conf = float(np.max(ws))
+        if self.values is not None:
+            pred = (w[:, None] * self.values[widx]).sum(axis=0)
+        else:
+            pred = float((w * self.scalar_values[widx]).sum())
+        return pred, conf, widx, z
+
+    def _allocate(self, z, y_arr):
+        empty = np.where(~self.filled)[0]
+        if len(empty) > 0:
+            j = int(self.rng.choice(empty))
+        else:
+            j = int(np.argmin(self.utility))
+        self.keys[j] = z
+        if self.values is not None:
+            self.values[j] = y_arr
+        else:
+            self.scalar_values[j] = float(y_arr)
+        self.utility[j] = self.u0
+        self.filled[j] = True
+        self.allocations += 1
+        return j
+
+    def learn(self, x, y):
+        self._ensure_values(y)
+        pred, conf, widx, z = self.predict(x)
+        y_arr = np.asarray(y, dtype=np.float32)
+        if self.values is not None and y_arr.ndim == 0:
+            y_arr = np.array([y_arr], dtype=np.float32)
+        pred_arr = np.asarray(pred, dtype=np.float32)
+        err = (
+            float(np.linalg.norm(y_arr - pred_arr))
+            if self.values is not None
+            else float(abs(float(y_arr) - float(pred_arr)))
+        )
+        # endogenous statistics for surprise-based allocation (no self-tuning)
+        self.err_ema = 0.99 * self.err_ema + 0.01 * err
+        surprise = err / (self.err_ema + 1e-6)
+        self.last_err = err
+        # mismatch / novelty conditions
+        mismatch = False
+        if np.any(self.filled) and self.values is not None and self.output_dim and self.output_dim > 1:
+            try:
+                pred_label = int(np.argmax(pred_arr))
+                target_label = int(np.argmax(y_arr))
+                mismatch = pred_label != target_label
+            except Exception:
+                mismatch = False
+        sims, sims_masked = self._sims_masked(z)
+        max_sim = float(np.max(sims_masked)) if np.any(self.filled) else -1e9
+        low_sim = np.any(self.filled) and (max_sim < self.sim_alloc_threshold)
+        allocate = (not np.any(self.filled)) or (surprise > self.v_high) or mismatch or low_sim
+        if allocate:
+            self._allocate(z, y_arr)
+        else:
+            k = min(self.n_winners, int(np.sum(self.filled)))
+            widx = np.argsort(sims_masked)[-k:][::-1]
+            ws = sims_masked[widx]
+            ex = np.exp(ws - np.max(ws))
+            w = ex / (ex.sum() + 1e-8)
+            for wi, idx in zip(w, widx):
+                self.keys[idx] = (1 - self.eta_k * wi) * self.keys[idx] + (self.eta_k * wi) * z
+                self.keys[idx] /= np.linalg.norm(self.keys[idx]) + 1e-8
+                if self.values is not None:
+                    self.values[idx] = self.values[idx] + self.eta_v * wi * (y_arr - self.values[idx])
+                else:
+                    self.scalar_values[idx] = self.scalar_values[idx] + self.eta_v * wi * (
+                        float(y_arr) - self.scalar_values[idx]
+                    )
+                self.utility[idx] = self.decay * self.utility[idx] + float(wi) * max(
+                    0.0, 1.0 - 0.5 * surprise
+                )
+        self.utility *= 0.9995
+        self.step += 1
+        return {"err": err, "surprise": surprise, "allocate": bool(allocate), "pred": pred}
+
+    def predict_vector(self, x):
+        pred, conf, widx, z = self.predict(x)
+        return np.asarray(pred, dtype=np.float32)
+
+    def predict_class(self, x):
+        pred, conf, widx, z = self.predict(x)
+        pred_arr = np.asarray(pred)
+        if self.values is not None and self.output_dim and self.output_dim > 1:
+            return int(np.argmax(pred_arr))
+        return int(np.round(float(pred_arr)))
+
+
 class RLS_SelfGate:
     """Candidate B: fixed random features + online multi-output RLS-like updates
     with self-gated forgetting and a small residual correction memory.
