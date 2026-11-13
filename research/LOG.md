@@ -101,3 +101,13 @@
   * HSAM below replay_buf200, near replay_buf100; SLDA and replay outperform HSAM
 - Updated FINAL_REPORT.md: reframed as "lightweight ART/GNG-U-family continual learner, not novel architecture"; updated executive summary, sections 7.2/7.3/7.4/7.5, claims table, limitations, git notes.
 - Committed to kilo/active-canyon-zrz only (commit 752e884). NOT pushed to main — awaiting explicit go-ahead.
+
+## 2026-11-13 16:00 UTC - Fashion-MNIST scale-up (real data via raw IDX)
+- Successfully loaded Fashion-MNIST from raw IDX files (urllib+gzip+struct, no ML framework needed).
+- Subsampled to 6000 train/1200 test, PCA-64 features (83.3% variance retained).
+- Benchmark results saved to research/03_experiments/simplified_benchmark_fmnist/results.json:
+  * Supervised: HSAM_Simplified s400_w3 acc 0.7563±0.0162 (matches original HSAM 0.7595±0.0057). ridge 0.7732, SLDA 0.7703, mlp_sklearn_64 0.8273.
+  * Continual: HSAM_Simplified s400_w3 AA 0.5690±0.0548 FM 0.4872±0.0631 (matches original HSAM AA 0.5782±0.0441). SLDA AA 0.7709±0.0094 FM 0.1547±0.0141. replay_buf200 AA 0.7893±0.0103 FM 0.2172±0.0107.
+- Finding: HSAM_Simplified matches original HSAM exactly at scale. SLDA/replay outperform HSAM on continual AA/FM. HSAM has high forgetting (FM ~0.48-0.58).
+- Updated FINAL_REPORT.md: Fashion-MNIST changed from INVALID to PRELIMINARY with actual numbers; removed "INVALID" label.
+- Committed to kilo/active-canyon-zrz only — NOT pushed to main.

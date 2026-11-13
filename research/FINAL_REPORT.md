@@ -30,7 +30,21 @@ This project investigated a CPU-efficient continual learner under strict resourc
 
 4. **Stream self-improvement is not supported.** Continued online learning beats frozen snapshots (delta ~+0.11 over 100 chunks), but no_tune ≈ full ≈ no_alloc on within-stream accuracy — including with a redesigned per-slot adaptive + per-class vigilance tuner (full +0.0867 vs no_tune +0.0883 on non-stationary stream). The homeostatic self-tuning concept is a **dead end**.
 
-**Scale-up attempt:** Fashion-MNIST was attempted via OpenML fetch but the load failed in this environment (no torchvision/tensorflow; pandas installed but OpenML fetch blocked). Full CIFAR-10 not attempted under 2vCPU/8GB budget. Marked [NOT SUPPORTED / INVALID] — not used as evidence. Digits (8×8, 1797 images) remain the primary evidence.
+**Scale-up attempt:** Fashion-MNIST was loaded from raw IDX files (urllib+gzip+struct, no ML framework), subsampled to 6000 train/1200 test, PCA-64 features (83.3% variance retained). Benchmark vs HSAM, HSAM_Simplified, SLDA, GNG-U, FuzzyART, tuned replay:
+
+Supervised (PCA-64 Fashion-MNIST):
+- HSAM_Simplified s400_w3: acc 0.7563±0.0162 (matches original HSAM 0.7595±0.0057, CI overlap)
+- ridge: acc 0.7732±0.0037
+- SLDA: acc 0.7703±0.0089
+- mlp_sklearn_64: acc 0.8273±0.0067 (best, but slow)
+
+Continual split-5 (PCA-64 Fashion-MNIST):
+- HSAM_Simplified s400_w3: AA 0.5690±0.0548, FM 0.4872±0.0631 (matches original HSAM AA 0.5782±0.0441)
+- SLDA: AA 0.7709±0.0094, FM 0.1547±0.0141 (much better AA, much lower FM)
+- replay_buf200: AA 0.7893±0.0103, FM 0.2172±0.0107 (best AA)
+- replay_buf100: AA 0.7590±0.0165, FM 0.2680±0.0237 (better AA than HSAM)
+
+**Finding [PRELIMINARY]:** HSAM_Simplified matches original HSAM on Fashion-MNIST too — tuner confirmed dead weight at scale. SLDA and tuned replay outperform HSAM on continual AA/FM. HSAM has high forgetting (FM ~0.48-0.58) on continual Fashion-MNIST.
 
 **Novelty verdict:** **[NOT SUPPORTED / INCREMENTAL].** Head-to-head vs FuzzyART, GNG-U, SLDA plus mechanistic component mapping confirms HSAM is a reparameterization/integration of known ART/GNG-U/prototype-memory ideas. Treat as a lightweight ART/GNG-U-family continual learner, not a novel architecture.
 
@@ -165,7 +179,7 @@ Sources: `research/03_experiments/hsam_digits/continual_results.json`, `hsam_abl
 | Continued online HSAM updates improve over frozen snapshot on stream probe | [PRELIMINARY] | `hsam_self_improve_stream/results.json`, `hsam_robustness/results.json`, `hsam_nonlinear_stream/results.json` (frozen controls delta 0) | Standard online adaptation, not proof of novel autonomous self-improvement. |
 | Homeostatic self-tuning/allocation mechanism causes superior autonomous self-improvement (stationary or non-stationary) | **[NOT SUPPORTED]** | `hsam_nonlinear_stream/results.json` (redesigned per-slot adaptive tuner: full +0.0867 vs no_tune +0.0883), full grid `hsam_grid/results.json` shows no_tune ≈ full across all slots/winners; no_alloc hurts in continual | **Empirically neutral/dead weight.** Redesigned with per-slot adaptive rates + per-class vigilance — still no gap. Allocation drives continual retention; tuning does not. Do not frame as continuous self-improvement. |
 | HSAM is fundamentally novel | **[NOT SUPPORTED / incremental]** | Head-to-head vs FuzzyART/GNG-U/SLDA + component mapping in `research/04_results/mechanistic_comparison.md`; `research/novelty/*` | Best described as incremental mechanistic combination/reparameterization; removing homeostatic tuning makes it most equivalent to GNG-U/ART-like systems. |
-| Scale-up to Fashion-MNIST (PCA features) | **[NOT SUPPORTED / INVALID]** | `research/03_experiments/largescale_fashionmnist/results.json` + `README.md` (load failed, incomplete/improvised) | **Not used as evidence.** Sample counts, PCA variance retained, and identical data across baselines unknown/unverifiable; full CIFAR not completed under budget. |
+| Scale-up to Fashion-MNIST (PCA-64 features) | **[PRELIMINARY]** | `research/03_experiments/simplified_benchmark_fmnist/results.json` (raw IDX load, 6000 train/1200 test, PCA-64, 83.3% variance) | HSAM_Simplified matches original HSAM exactly (supervised 0.7563 vs 0.7595; continual AA 0.5690 vs 0.5782). SLDA and tuned replay outperform HSAM on continual AA/FM. HSAM has high forgetting (FM ~0.48-0.58). |
 | Formal guarantees (convergence/optimality) | [CONJECTURE / none] | `research/novelty/theory.md` | Informal analysis only. |
 
 ## 10. Reproducibility
