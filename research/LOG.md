@@ -111,3 +111,23 @@
 - Finding: HSAM_Simplified matches original HSAM exactly at scale. SLDA/replay outperform HSAM on continual AA/FM. HSAM has high forgetting (FM ~0.48-0.58).
 - Updated FINAL_REPORT.md: Fashion-MNIST changed from INVALID to PRELIMINARY with actual numbers; removed "INVALID" label.
 - Committed to kilo/active-canyon-zrz only — NOT pushed to main.
+
+## 2026-11-14 05:33 UTC - D1-D4 triage complete; D4b design
+
+### Triaged candidates (overfit-32 + supervised digits, 5 seeds):
+- D1 Learned Optimizer: overfit-32 0.31, digits 0.55±0.35 — KILL
+- D2 Predictive Coding (iPC): overfit-32 0.25, digits 0.10 (chance) — KILL
+- D3 Sparse MoE Routing: overfit-32 1.00, digits 0.10 (chance, router collapsed) — KILL
+- D4 PackNet Isolation: overfit-32 1.00, digits 0.969±0.006 (beats ridge 0.939, near MLP 0.979) — SURVIVES
+
+### D4 = PackNet reimplementation (KNOWN METHOD, no novelty claim)
+D4 as specified is iterative magnitude pruning + per-task weight freezing (Mallya & Lazebnik 2018, PackNet). Running it validates a known architecture; it does NOT produce a novelty claim even if it performs well. It serves as a baseline only.
+
+### D4b: Surprise-Gated Dynamic Capacity Allocation (NEW DESIGN)
+Replace PackNet's fixed-schedule magnitude pruning with HSAM-style surprise/mismatch-gated dynamic capacity allocation:
+- Same fixed backbone MLP as D4.
+- After each task, compute end-of-task surprise = mean prediction error on a held-out validation slice of that task.
+- If surprise LOW (task well-explained by existing capacity): freeze FEWER new weights (reuse more existing unfrozen capacity), keep more weights plastic for future tasks.
+- If surprise HIGH (task genuinely novel): unfreeze/allocate MORE new capacity for the next task.
+- Track per-weight utility (contribution to correct predictions); high-utility weights protected from pruning, low-utility weights candidates for reallocation when surprise is high.
+- Falsifiable prediction: D4b vs vanilla D4/PackNet on split-digits-5 continual (5 seeds). D4b should use measurably LESS total frozen capacity on easy/similar task sequences (e.g., (0,1),(2,3) digit pairs) and MORE on novel sequences, while AA >= D4 and FM <= D4. If D4b does not reduce capacity usage on easy sequences without sacrificing AA/FM, D4b is dead weight — fall back to vanilla D4 as baseline only.
