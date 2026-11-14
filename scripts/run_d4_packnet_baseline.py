@@ -4,8 +4,12 @@ D4 PackNet Parameter Isolation — BASELINE (known method, not a candidate).
 Iterative magnitude pruning + per-task weight freezing (Mallya & Lazebnik 2018).
 Filed under baselines in FINAL_REPORT.md; serves as a strong, known-good comparator.
 
-Uses sklearn MLPClassifier as the base learner (verified working) with magnitude-based
-pruning + weight freezing between tasks.
+Key implementation details (PackNet semantics):
+- Weights carry forward between tasks (not re-initialized)
+- After each task, prune bottom prune_frac% of weights by magnitude and FREEZE them
+- Next task trains only on unpruned weights
+- At eval time for task i: use only weights unpruned at task i's time, with their
+  values as they were right after task i finished training
 """
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -16,7 +20,6 @@ import numpy as np
 from src.utils import set_seed, Tracker, save_json, git_commit_hash, bootstrap_ci
 from src.data import get_digits_split, split_digits_tasks
 from src.metrics import average_accuracy, forgetting_measure
-from sklearn.neural_network import MLPClassifier
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 OUT = os.path.join(ROOT, "research", "03_experiments", "d4_packnet_baseline")
@@ -24,16 +27,22 @@ os.makedirs(OUT, exist_ok=True)
 SEEDS = [0, 1, 2, 3, 4]
 
 
-def one_hot(y, n=10):
-    v = np.zeros(n, dtype=np.float32)
-    v[int(y)] = 1.0
-    return v
+def softmax(logits):
+    logits = logits - np.max(logits, axis=-1, keepdims=True)
+    e = np.exp(logits)
+    return e / e.sum()
 
 
 class PackNet:
     """PackNet (Mallya & Lazebnik 2018) using sklearn MLPClassifier as base.
-    After each task, prunes bottom prune_frac% of weights by magnitude and freezes them.
-    Subsequent tasks only train on unpruned (active) weights."""
+
+    Per-task: train on unpruned weights, then prune bottom prune_frac% by magnitude
+    and freeze them. Next task trains only on remaining unpruned weights, starting
+    from where they were after pruning.
+
+    At evaluation for task i: restore weights to their state right after task i,
+    using only weights unpruned at task i's time (later pruned weights are ignored).
+    """
     def __init__(self, in_dim, hidden, out_dim, seed=0, prune_frac=0.3):
         self.in_dim = in_dim
         self.hidden = hidden
@@ -41,92 +50,128 @@ class PackNet:
         self.seed = seed
         self.prune_frac = prune_frac
         self.task_count = 0
+
+        # Current model weights
+        self.w1 = None
+        self.b1 = None
+        self.w2 = None
+        self.b2 = None
+
+        # Per-task snapshots: for each task, store (w1, b1, w2, b2, mask_w1, mask_w2)
+        # as they were right after that task finished training
+        self.task_snapshots = []
+
+        # Current masks (which weights are still trainable)
         self.mask_w1 = None
-        self.mask_b1 = None
         self.mask_w2 = None
-        self.mask_b2 = None
-        self.clf = None
 
-    def _init_clf(self, X, y):
-        self.clf = MLPClassifier(
-            hidden_layer_sizes=(self.hidden,),
-            max_iter=1,
-            learning_rate_init=0.05,
-            momentum=0.9,
-            random_state=self.seed,
-            warm_start=True,
-        )
-        self.clf.fit(X, y)
-        # Initialize masks (all trainable)
-        self.mask_w1 = np.ones_like(self.clf.coefs_[0], dtype=bool)
-        self.mask_b1 = np.ones_like(self.clf.intercepts_[0], dtype=bool)
-        self.mask_w2 = np.ones_like(self.clf.coefs_[1], dtype=bool)
-        self.mask_b2 = np.ones_like(self.clf.intercepts_[1], dtype=bool)
+    def _init_weights(self, X, y):
+        """Initialize weights randomly."""
+        self.rng = np.random.default_rng(self.seed)
+        self.w1 = self.rng.standard_normal((self.in_dim, self.hidden)) * 0.1
+        self.b1 = np.zeros(self.hidden, dtype=np.float64)
+        self.w2 = self.rng.standard_normal((self.hidden, self.out_dim)) * 0.1
+        self.b2 = np.zeros(self.out_dim, dtype=np.float64)
+        self.mask_w1 = np.ones_like(self.w1, dtype=bool)
+        self.mask_w2 = np.ones_like(self.w2, dtype=bool)
+        # Momentum buffers
+        self.v_w1 = np.zeros_like(self.w1)
+        self.v_b1 = np.zeros_like(self.b1)
+        self.v_w2 = np.zeros_like(self.w2)
+        self.v_b2 = np.zeros_like(self.b2)
 
-    def _apply_masks(self):
-        """Apply pruning masks to weights before training."""
-        self.clf.coefs_[0] = self.clf.coefs_[0] * self.mask_w1
-        self.clf.intercepts_[0] = self.clf.intercepts_[0] * self.mask_b1
-        self.clf.coefs_[1] = self.clf.coefs_[1] * self.mask_w2
-        self.clf.intercepts_[1] = self.clf.intercepts_[1] * self.mask_b2
+    def train_step(self, X, y, lr=0.05, epochs=50):
+        """Train on unpruned weights only using mini-batch SGD with momentum."""
+        if self.w1 is None:
+            self._init_weights(X, y)
 
-    def train_step(self, X, y, lr=0.05, epochs=1):
-        self.clf = MLPClassifier(
-            hidden_layer_sizes=(self.hidden,),
-            max_iter=epochs,
-            learning_rate_init=lr,
-            momentum=0.9,
-            random_state=self.seed,
-        )
-        self.clf.fit(X, y)
-        # Initialize masks on first call (all trainable)
-        if self.mask_w1 is None:
-            self.mask_w1 = np.ones_like(self.clf.coefs_[0], dtype=bool)
-            self.mask_b1 = np.ones_like(self.clf.intercepts_[0], dtype=bool)
-            self.mask_w2 = np.ones_like(self.clf.coefs_[1], dtype=bool)
-            self.mask_b2 = np.ones_like(self.clf.intercepts_[1], dtype=bool)
-        # Apply masks after training (zero out pruned weights)
-        self._apply_masks()
+        n = len(X)
+        for ep in range(epochs):
+            idx = np.random.default_rng(self.seed + ep).permutation(n)
+            for i in idx:
+                x = X[i]
+                yi = y[i]
+                # Forward pass
+                h = np.maximum(0, x @ self.w1 + self.b1)
+                logits = h @ self.w2 + self.b2
+                probs = softmax(logits)
+                y_onehot = np.zeros(self.out_dim, dtype=np.float64)
+                y_onehot[int(yi)] = 1.0
+                err = probs - y_onehot
+                # Gradients
+                d_w2 = np.outer(h, err)
+                d_b2 = err
+                d_h = err @ self.w2.T * (h > 0)
+                d_w1 = np.outer(x, d_h)
+                d_b1 = d_h
+                # Momentum updates (masked: only unpruned weights change)
+                self.v_w2 = 0.9 * self.v_w2 - lr * d_w2 * self.mask_w2
+                self.v_b2 = 0.9 * self.v_b2 - lr * d_b2
+                self.v_w1 = 0.9 * self.v_w1 - lr * d_w1 * self.mask_w1
+                self.v_b1 = 0.9 * self.v_b1 - lr * d_b1
+                self.w2 += self.v_w2
+                self.b2 += self.v_b2
+                self.w1 += self.v_w1
+                self.b1 += self.v_b1
+
+    def predict(self, X):
+        X = np.asarray(X)
+        if X.ndim == 1:
+            h = np.maximum(0, X @ self.w1 + self.b1)
+            return h @ self.w2 + self.b2
+        h = np.maximum(0, X @ self.w1 + self.b1)
+        return h @ self.w2 + self.b2
+
+    def predict_proba(self, X):
+        logits = self.predict(X)
+        probs = softmax(logits)
+        return probs
+
+    def predict_class(self, x):
+        return int(np.argmax(self.predict(x)))
 
     def prune_and_freeze(self):
         """Prune bottom prune_frac% of weights by magnitude and freeze them."""
-        all_w = np.concatenate([
-            np.abs(self.clf.coefs_[0]).flatten(),
-            np.abs(self.clf.intercepts_[0]).flatten(),
-            np.abs(self.clf.coefs_[1]).flatten(),
-            np.abs(self.clf.intercepts_[1]).flatten(),
-        ])
+        all_w = np.concatenate([np.abs(self.w1).flatten(), np.abs(self.w2).flatten()])
         threshold = np.percentile(all_w, self.prune_frac * 100)
-        m1 = np.abs(self.clf.coefs_[0]) > threshold
-        m2 = np.abs(self.clf.intercepts_[0]) > threshold
-        m3 = np.abs(self.clf.coefs_[1]) > threshold
-        m4 = np.abs(self.clf.intercepts_[1]) > threshold
+        m1 = np.abs(self.w1) > threshold
+        m2 = np.abs(self.w2) > threshold
         if m1.sum() == 0: m1[:] = True
         if m2.sum() == 0: m2[:] = True
-        if m3.sum() == 0: m3[:] = True
-        if m4.sum() == 0: m4[:] = True
         self.mask_w1 = self.mask_w1 & m1
-        self.mask_b1 = self.mask_b1 & m2
-        self.mask_w2 = self.mask_w2 & m3
-        self.mask_b2 = self.mask_b2 & m4
+        self.mask_w2 = self.mask_w2 & m2
         self.task_count += 1
 
-    def predict(self, X):
-        return self.clf.predict(X)
+    def save_snapshot(self, task_idx):
+        """Save weights and masks right after task task_idx finishes training."""
+        self.task_snapshots.append({
+            'w1': self.w1.copy(),
+            'b1': self.b1.copy(),
+            'w2': self.w2.copy(),
+            'b2': self.b2.copy(),
+            'mask_w1': self.mask_w1.copy(),
+            'mask_w2': self.mask_w2.copy(),
+        })
 
-    def predict_proba(self, X):
-        return self.clf.predict_proba(X)
+    def restore_snapshot(self, task_idx):
+        """Restore weights and masks to their state right after task task_idx."""
+        snap = self.task_snapshots[task_idx]
+        self.w1 = snap['w1'].copy()
+        self.b1 = snap['b1'].copy()
+        self.w2 = snap['w2'].copy()
+        self.b2 = snap['b2'].copy()
+        self.mask_w1 = snap['mask_w1'].copy()
+        self.mask_w2 = snap['mask_w2'].copy()
 
     def frozen_count(self):
-        total = (self.clf.coefs_[0].size + self.clf.intercepts_[0].size +
-                 self.clf.coefs_[1].size + self.clf.intercepts_[1].size)
-        frozen = (~self.mask_w1).sum() + (~self.mask_b1).sum() + \
-                 (~self.mask_w2).sum() + (~self.mask_b2).sum()
+        total = self.w1.size + self.w2.size
+        frozen = (~self.mask_w1).sum() + (~self.mask_w2).sum()
         return int(frozen), int(total), float(frozen / total)
 
 
 def eval_acc(model, X, y):
-    preds = model.predict(X)
+    logits = model.predict(X)
+    preds = np.argmax(logits, axis=1)
     return float(np.mean(preds == y))
 
 
@@ -141,7 +186,10 @@ def continual_packnet(seed, prune_frac=0.3, hidden=64, epochs=50, lr=0.05):
             Xtr, ytr = task['X_train'], task['y_train']
             model.train_step(Xtr, ytr, lr=lr, epochs=epochs)
             model.prune_and_freeze()
-            for j in range(T):
+            model.save_snapshot(k)
+            # Evaluate ALL tasks seen so far using their respective snapshots
+            for j in range(k + 1):
+                model.restore_snapshot(j)
                 Xt, yt = tasks[j]['X_test'], tasks[j]['y_test']
                 task_acc[j, k] = eval_acc(model, Xt, yt)
     tr.update()
@@ -152,6 +200,7 @@ def continual_packnet(seed, prune_frac=0.3, hidden=64, epochs=50, lr=0.05):
 
 
 def stream_packnet(seed, prune_frac=0.3, hidden=64, chunks=20, chunk_size=200, epochs=3, lr=0.05):
+    """Stream over training data in chunks, evaluate on fixed held-out test set."""
     set_seed(seed)
     (Xtr, ytr), (Xte, yte) = get_digits_split(seed=seed)
     rng = np.random.default_rng(seed)
