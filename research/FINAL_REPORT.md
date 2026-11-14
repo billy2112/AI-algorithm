@@ -3,13 +3,15 @@
 **Date:** 2026-11-13  
 **Repository:** `/workspace/app` (`https://github.com/billy2112/AI-algorithm.git`)  
 **Environment:** Debian 13 (trixie), 2 vCPU, 8 GB RAM, no GPU, CPU-only. Python 3.13.5; numpy 2.2.4, scipy 1.15.3, scikit-learn 1.4.2, torch 2.6.0 (CPU), matplotlib 3.10.1, tqdm 4.67.1, psutil 7.0.0.  
-**Working branch:** `kilo/active-canyon-zrz` at `752e884` (committed locally, not pushed to main).  
+**Working branch:** `kilo/active-canyon-zrz` at `d8488ef` (committed locally, not pushed to main).  
 
 ## Executive summary
 
-This project investigated a CPU-efficient continual learner under strict resource and evidence constraints. I implemented and evaluated **HSAM (C1)** — a backprop-free online prototype/associative memory — and then **HSAM_Simplified**, a variant with the homeostatic self-tuning controller removed (proven a dead end).
+**Conclusive finding up front: the homeostatic self-tuning controller is a dead end.** Both the original version and a redesigned version (per-slot adaptive learning rates + per-class vigilance) were tested across stationary streams, non-stationary/distribution-shift streams, and a full hyperparameter grid (slots 100/200/400/800 × winners 1/3/5). In every case `no_tune` ≈ `full` (no statistically significant gap). The self-tuning concept does not produce measurable autonomous self-improvement and should not be framed as such.
 
-**Honest framing:** HSAM_Simplified is positioned as a **lightweight ART/GNG-U-family continual learner**, not a novel architecture. Its validated components — fixed random projection, k-winner softmax retrieval, local delta key/value updates, surprise/mismatch/low-sim-gated slot allocation, utility-based replacement — map directly onto ideas from ART (vigilance/allocation), GNG-U (utility-based replacement), and prototype-memory literature. No component is structurally impossible for these families.
+This project investigated a CPU-efficient continual learner under strict resource and evidence constraints. I implemented and evaluated **HSAM (C1)** — a backprop-free online prototype/associative memory — and then **HSAM_Simplified**, a variant with the homeostatic self-tuning controller removed. HSAM_Simplified matches original HSAM exactly on supervised accuracy and continual AA/FM, making the simpler variant strictly preferable.
+
+**Honest framing:** HSAM_Simplified is positioned as a **lightweight ART/GNG-U/SLDA-family continual learner**, not a novel architecture. Its validated components — fixed random projection, k-winner softmax retrieval, local delta key/value updates, surprise/mismatch/low-sim-gated slot allocation, utility-based replacement — map directly onto ideas from ART (vigilance/allocation), GNG-U (utility-based replacement), and SLDA (prototype/class-mean learning). No component is structurally impossible for these families.
 
 **Headline outcomes (preliminary, small-scale on sklearn digits 8×8):**
 
@@ -204,6 +206,27 @@ Sources: `research/03_experiments/hsam_digits/continual_results.json`, `hsam_abl
 - Novelty is incremental; a publishable claim would require stronger differentiation and wins over nearest ART/GNG/SOINN/prototype baselines.
 - Missing prior `run.log` files for some runs (tee race noted in logs/history); JSON artifacts are the primary evidence.
 
+## 11.5. What a genuinely novel version would need
+
+The component analysis in `research/04_results/mechanistic_comparison.md` shows that every HSAM ingredient has a direct counterpart in prior art:
+
+| HSAM component | Closest prior art | Identical vs. differs |
+|---|---|---|
+| Fixed random projection | None (preprocessing choice) | Differs — ART/GNG-U/SLDA use raw input |
+| k-winner delta key/value update | ART resonance update, GNG-U competitive update | Partly similar — local prototype update |
+| Surprise-gated allocation | ART vigilance test, GNG-U insertion | Very close — functionally analogous |
+| Utility-based replacement | GNG-U utility deletion | Close — same idea, different policy |
+| Homeostatic self-tuning | ART self-adjusting vigilance variants | Weak — dead weight empirically |
+
+If someone removed the single most novel-looking component (homeostatic self-tuning, now proven dead weight), HSAM would become equivalent to a **GNG-U/ART-like prototype system** — not something these families structurally cannot express.
+
+**What a genuinely novel version would need:** A mechanism that is not reexpressible in ART/GNG-U/SLDA terms. Candidates worth exploring (but not tested here):
+- A **self-modifying update rule** where the system rewrites its own plasticity rule based on predicted error (beyond fixed per-slot rates) — RSMLM attempted this but was linear and untested.
+- **Structural capacity that adapts to task boundaries** without a vigilance threshold — e.g., topology-aware growth that detects task transitions autonomously rather than via surprise thresholding.
+- **Cross-modal or cross-task transfer** where slots allocated for one task are repurposed for another without catastrophic interference — beyond HSAM's utility-based replacement.
+
+None of these were implemented or tested. The present deliverable is an honest, lightweight ART/GNG-U-family continual learner with validated components — not a novel architecture.
+
 ## 12. Integrity and git notes
 - I did not fabricate experimental numbers, citations, or execution claims. Prior/superseded artifacts (e.g. `candidates_digits/*`) are retained and labeled as such.
-- All work committed to `kilo/active-canyon-zrz` only (commit `752e884`). **Not pushed to main** — awaiting explicit go-ahead. `main` remains at `db2e2dc`; `origin/main` was advanced to `722d821` in an earlier push (before the "wait for go-ahead" instruction was clarified).
+- All work committed to `kilo/active-canyon-zrz` only (commit `d8488ef`). **Not pushed to main** — awaiting explicit go-ahead. `main` remains at `db2e2dc`; `origin/main` was advanced to `722d821` in an earlier push (before the "wait for go-ahead" instruction was clarified).
