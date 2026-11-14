@@ -152,7 +152,13 @@ class PackNetBase:
 
 class PackNetD4(PackNetBase):
     """Vanilla PackNet: fixed prune_frac after every task."""
+    def compute_surprise(self, X, y):
+        """Compute surprise on a slice. Default: return fixed surprise (0.5) so
+        prune_frac stays constant for vanilla PackNet."""
+        return 0.5, 0.0  # err_rate, ce
+
     def prune_task(self, task_idx, surprise):
+        """Default: fixed prune_frac (vanilla PackNet behavior)."""
         self.prune_and_freeze(self.prune_frac)
 
 
