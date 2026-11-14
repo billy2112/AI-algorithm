@@ -71,14 +71,20 @@ class PackNet:
         self.clf.intercepts_[1] = self.clf.intercepts_[1] * self.mask_b2
 
     def train_step(self, X, y, lr=0.05, epochs=1):
-        if self.clf is None:
-            self._init_clf(X, y)
-        else:
-            self.clf.max_iter = epochs
-            self.clf.learning_rate_init = lr
-            self.clf.random_state = self.seed
-            self.clf.warm_start = True
-            self.clf.fit(X, y)
+        self.clf = MLPClassifier(
+            hidden_layer_sizes=(self.hidden,),
+            max_iter=epochs,
+            learning_rate_init=lr,
+            momentum=0.9,
+            random_state=self.seed,
+        )
+        self.clf.fit(X, y)
+        # Initialize masks on first call (all trainable)
+        if self.mask_w1 is None:
+            self.mask_w1 = np.ones_like(self.clf.coefs_[0], dtype=bool)
+            self.mask_b1 = np.ones_like(self.clf.intercepts_[0], dtype=bool)
+            self.mask_w2 = np.ones_like(self.clf.coefs_[1], dtype=bool)
+            self.mask_b2 = np.ones_like(self.clf.intercepts_[1], dtype=bool)
         # Apply masks after training (zero out pruned weights)
         self._apply_masks()
 
