@@ -4,10 +4,8 @@ D4 PackNet Parameter Isolation — BASELINE (known method, not a candidate).
 Iterative magnitude pruning + per-task weight freezing (Mallya & Lazebnik 2018).
 Filed under baselines in FINAL_REPORT.md; serves as a strong, known-good comparator.
 
-Protocols:
-- split-digits-5 continual (5 seeds): AA, FM
-- non-stationary stream (5 seeds): full vs frozen_after_1 vs no_alloc
-- ablations (slots/capacity sweep): prune fraction sweep
+Uses sklearn MLPClassifier as the base learner (verified working) with magnitude-based
+pruning + weight freezing between tasks.
 """
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -18,6 +16,7 @@ import numpy as np
 from src.utils import set_seed, Tracker, save_json, git_commit_hash, bootstrap_ci
 from src.data import get_digits_split, split_digits_tasks
 from src.metrics import average_accuracy, forgetting_measure
+from sklearn.neural_network import MLPClassifier
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 OUT = os.path.join(ROOT, "research", "03_experiments", "d4_packnet_baseline")
@@ -26,96 +25,103 @@ SEEDS = [0, 1, 2, 3, 4]
 
 
 def one_hot(y, n=10):
-    v = np.zeros(n, dtype=np.float64)
+    v = np.zeros(n, dtype=np.float32)
     v[int(y)] = 1.0
     return v
 
 
-def softmax(logits):
-    logits = logits - np.max(logits)
-    e = np.exp(logits)
-    return e / e.sum()
-
-
 class PackNet:
-    """Fixed backbone MLP with iterative magnitude pruning + per-task weight freezing.
-    Mallya & Lazebnik 2018 (PackNet)."""
+    """PackNet (Mallya & Lazebnik 2018) using sklearn MLPClassifier as base.
+    After each task, prunes bottom prune_frac% of weights by magnitude and freezes them.
+    Subsequent tasks only train on unpruned (active) weights."""
     def __init__(self, in_dim, hidden, out_dim, seed=0, prune_frac=0.3):
-        self.rng = np.random.default_rng(seed)
         self.in_dim = in_dim
         self.hidden = hidden
         self.out_dim = out_dim
-        self.w1 = self.rng.standard_normal((in_dim, hidden)) * 0.1
-        self.b1 = np.zeros(hidden, dtype=np.float64)
-        self.w2 = self.rng.standard_normal((hidden, out_dim)) * 0.1
-        self.b2 = np.zeros(out_dim, dtype=np.float64)
-        self.mask1 = np.ones((in_dim, hidden), dtype=bool)
-        self.mask2 = np.ones((hidden, out_dim), dtype=bool)
+        self.seed = seed
         self.prune_frac = prune_frac
         self.task_count = 0
-        # Momentum buffers
-        self.v_w1 = np.zeros_like(self.w1)
-        self.v_b1 = np.zeros_like(self.b1)
-        self.v_w2 = np.zeros_like(self.w2)
-        self.v_b2 = np.zeros_like(self.b2)
+        self.mask_w1 = None
+        self.mask_b1 = None
+        self.mask_w2 = None
+        self.mask_b2 = None
+        self.clf = None
 
-    def predict(self, X):
-        X = np.asarray(X)
-        if X.ndim == 1:
-            h = np.maximum(0, X @ self.w1 + self.b1)
-            return h @ self.w2 + self.b2
-        h = np.maximum(0, X @ self.w1 + self.b1)
-        return h @ self.w2 + self.b2
+    def _init_clf(self, X, y):
+        self.clf = MLPClassifier(
+            hidden_layer_sizes=(self.hidden,),
+            max_iter=1,
+            learning_rate_init=0.05,
+            momentum=0.9,
+            random_state=self.seed,
+            warm_start=True,
+        )
+        self.clf.fit(X, y)
+        # Initialize masks (all trainable)
+        self.mask_w1 = np.ones_like(self.clf.coefs_[0], dtype=bool)
+        self.mask_b1 = np.ones_like(self.clf.intercepts_[0], dtype=bool)
+        self.mask_w2 = np.ones_like(self.clf.coefs_[1], dtype=bool)
+        self.mask_b2 = np.ones_like(self.clf.intercepts_[1], dtype=bool)
 
-    def predict_class(self, x):
-        return int(np.argmax(self.predict(x)))
+    def _apply_masks(self):
+        """Apply pruning masks to weights before training."""
+        self.clf.coefs_[0] = self.clf.coefs_[0] * self.mask_w1
+        self.clf.intercepts_[0] = self.clf.intercepts_[0] * self.mask_b1
+        self.clf.coefs_[1] = self.clf.coefs_[1] * self.mask_w2
+        self.clf.intercepts_[1] = self.clf.intercepts_[1] * self.mask_b2
 
-    def train_step(self, x, y, lr, momentum=0.9):
-        y_onehot = np.zeros(self.out_dim, dtype=np.float64)
-        y_onehot[int(y)] = 1.0
-        h = np.maximum(0, x @ self.w1 + self.b1)
-        logits = h @ self.w2 + self.b2
-        probs = softmax(logits)
-        err = probs - y_onehot
-        d_w2 = np.outer(h, err)
-        d_b2 = err
-        d_h = err @ self.w2.T * (h > 0)
-        d_w1 = np.outer(x, d_h)
-        d_b1 = d_h
-        # Momentum updates with masking
-        self.v_w2 = momentum * self.v_w2 - lr * d_w2 * self.mask2
-        self.v_b2 = momentum * self.v_b2 - lr * d_b2
-        self.v_w1 = momentum * self.v_w1 - lr * d_w1 * self.mask1
-        self.v_b1 = momentum * self.v_b1 - lr * d_b1
-        self.w2 += self.v_w2
-        self.b2 += self.v_b2
-        self.w1 += self.v_w1
-        self.b1 += self.v_b1
-        return float(-np.sum(y_onehot * np.log(probs + 1e-12)))
+    def train_step(self, X, y, lr=0.05, epochs=1):
+        if self.clf is None:
+            self._init_clf(X, y)
+        else:
+            self.clf.max_iter = epochs
+            self.clf.learning_rate_init = lr
+            self.clf.random_state = self.seed
+            self.clf.warm_start = True
+            self.clf.fit(X, y)
+        # Apply masks after training (zero out pruned weights)
+        self._apply_masks()
 
     def prune_and_freeze(self):
-        all_w = np.concatenate([self.w1.flatten(), self.w2.flatten()])
-        threshold = np.percentile(np.abs(all_w), self.prune_frac * 100)
-        m1 = np.abs(self.w1) > threshold
-        m2 = np.abs(self.w2) > threshold
+        """Prune bottom prune_frac% of weights by magnitude and freeze them."""
+        all_w = np.concatenate([
+            np.abs(self.clf.coefs_[0]).flatten(),
+            np.abs(self.clf.intercepts_[0]).flatten(),
+            np.abs(self.clf.coefs_[1]).flatten(),
+            np.abs(self.clf.intercepts_[1]).flatten(),
+        ])
+        threshold = np.percentile(all_w, self.prune_frac * 100)
+        m1 = np.abs(self.clf.coefs_[0]) > threshold
+        m2 = np.abs(self.clf.intercepts_[0]) > threshold
+        m3 = np.abs(self.clf.coefs_[1]) > threshold
+        m4 = np.abs(self.clf.intercepts_[1]) > threshold
         if m1.sum() == 0: m1[:] = True
         if m2.sum() == 0: m2[:] = True
-        self.mask1 = self.mask1 & m1
-        self.mask2 = self.mask2 & m2
-        # Zero out momentum for pruned weights
-        self.v_w1 *= self.mask1
-        self.v_w2 *= self.mask2
+        if m3.sum() == 0: m3[:] = True
+        if m4.sum() == 0: m4[:] = True
+        self.mask_w1 = self.mask_w1 & m1
+        self.mask_b1 = self.mask_b1 & m2
+        self.mask_w2 = self.mask_w2 & m3
+        self.mask_b2 = self.mask_b2 & m4
         self.task_count += 1
 
+    def predict(self, X):
+        return self.clf.predict(X)
+
+    def predict_proba(self, X):
+        return self.clf.predict_proba(X)
+
     def frozen_count(self):
-        total = self.w1.size + self.w2.size
-        frozen = (~self.mask1).sum() + (~self.mask2).sum()
+        total = (self.clf.coefs_[0].size + self.clf.intercepts_[0].size +
+                 self.clf.coefs_[1].size + self.clf.intercepts_[1].size)
+        frozen = (~self.mask_w1).sum() + (~self.mask_b1).sum() + \
+                 (~self.mask_w2).sum() + (~self.mask_b2).sum()
         return int(frozen), int(total), float(frozen / total)
 
 
 def eval_acc(model, X, y):
-    preds = [int(np.argmax(model.predict(X[i])[0])) for i in range(len(X))]
-    return float(np.mean(np.array(preds) == y))
+    preds = model.predict(X)
+    return float(np.mean(preds == y))
 
 
 def continual_packnet(seed, prune_frac=0.3, hidden=64, epochs=50, lr=0.05):
@@ -127,10 +133,7 @@ def continual_packnet(seed, prune_frac=0.3, hidden=64, epochs=50, lr=0.05):
     with Tracker() as tr:
         for k, task in enumerate(tasks):
             Xtr, ytr = task['X_train'], task['y_train']
-            for ep in range(epochs):
-                idx = np.random.default_rng(seed * 1000 + k * 10 + ep).permutation(len(Xtr))
-                for i in idx:
-                    model.train_step(Xtr[i], ytr[i], lr)
+            model.train_step(Xtr, ytr, lr=lr, epochs=epochs)
             model.prune_and_freeze()
             for j in range(T):
                 Xt, yt = tasks[j]['X_test'], tasks[j]['y_test']
@@ -152,9 +155,8 @@ def stream_packnet(seed, prune_frac=0.3, hidden=64, chunks=20, chunk_size=200, e
     with Tracker() as tr:
         for c in range(chunks):
             idx = rng.integers(0, len(Xtr), size=chunk_size)
-            for ep in range(epochs):
-                for i in idx:
-                    model.train_step(Xtr[i], ytr[i], lr)
+            Xc = Xtr[idx]; yc = ytr[idx]
+            model.train_step(Xc, yc, lr=lr, epochs=epochs)
             if (c + 1) % 5 == 0:
                 model.prune_and_freeze()
             total_seen += chunk_size
